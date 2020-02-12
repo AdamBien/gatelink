@@ -1,6 +1,7 @@
 
 package com.airhacks.gatelink.notifications.boundary;
 
+import com.airhacks.gatelink.Boundary;
 import com.airhacks.gatelink.encryption.boundary.EncryptionService;
 import com.airhacks.gatelink.encryption.entity.EncryptedContent;
 import com.airhacks.gatelink.keymanagement.boundary.KeyStore;
@@ -34,6 +35,7 @@ import org.jose4j.lang.JoseException;
  *
  * @author airhacks.com
  */
+@Boundary
 public class NotificationsSender {
 
     @Inject
