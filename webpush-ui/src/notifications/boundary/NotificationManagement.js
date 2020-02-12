@@ -3,8 +3,11 @@ import { html } from "../../lit-html/lit-html.js";
 import { askForNotification,areNotificationsGranted} from '../control/Notifications.js';
 class NotificationManagement extends GElement {
     
-    async postConstruct() { 
-        const status = await navigator.permissions.query({ 'name': "notifications" });
+    async postConstruct() {
+        let status = 'browser does not support permissions';
+        if (navigator.permissions && navigator.permissions.query) { 
+            status = await navigator.permissions.query({ 'name': "notifications" });
+        }
         console.dir(status);
     }
 
