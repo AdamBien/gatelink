@@ -1,6 +1,7 @@
 
 package com.airhacks.gatelink.notifications.control;
 
+import com.airhacks.gatelink.Control;
 import com.airhacks.gatelink.log.boundary.Tracer;
 import java.io.ByteArrayInputStream;
 import javax.annotation.PostConstruct;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.Response;
  *
  * @author airhacks.com
  */
+@Control
 public class PushService {
 
     private Client client;

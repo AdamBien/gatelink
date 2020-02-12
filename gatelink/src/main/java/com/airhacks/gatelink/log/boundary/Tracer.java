@@ -1,12 +1,14 @@
 
 package com.airhacks.gatelink.log.boundary;
 
+import com.airhacks.gatelink.Boundary;
 import java.util.Base64;
 
 /**
  *
  * @author airhacks.com
  */
+@Boundary
 public class Tracer {
 
     static final String PREFIX = "pushserver";

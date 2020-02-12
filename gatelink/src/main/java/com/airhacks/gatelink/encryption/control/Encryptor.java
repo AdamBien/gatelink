@@ -1,6 +1,7 @@
 
 package com.airhacks.gatelink.encryption.control;
 
+import com.airhacks.gatelink.Control;
 import com.airhacks.gatelink.keymanagement.entity.ServerKeys;
 import com.airhacks.gatelink.notifications.boundary.Notification;
 import java.io.ByteArrayOutputStream;
@@ -31,6 +32,7 @@ import org.eclipse.microprofile.metrics.annotation.Metered;
  *
  * @author airhacks.com
  */
+@Control
 public class Encryptor {
 
     public static final int SHA_256_LENGTH = 32;
