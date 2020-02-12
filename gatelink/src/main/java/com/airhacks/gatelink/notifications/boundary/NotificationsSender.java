@@ -63,7 +63,7 @@ public class NotificationsSender {
     @ConfigProperty(name = "subject", defaultValue = "mailto:admin@airhacks.com")
     String subject;
 
-    @Counted(monotonic = true, name = "forwardedMessages")
+    @Counted(absolute = true, name = "forwardedMessages")
     public void send(String message) {
         tracer.log("Sending " + message);
         ServerKeys serverKeys = this.keyStore.getKeys();

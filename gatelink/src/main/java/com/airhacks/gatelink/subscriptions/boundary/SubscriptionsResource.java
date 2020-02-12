@@ -33,7 +33,7 @@ public class SubscriptionsResource {
     SubscriptionsStore store;
 
     @POST
-    @Counted(name = "subscribeActions", monotonic = true)
+    @Counted(name = "subscribeActions", absolute = true)
     public void subscribe(Subscription subscription) {
         System.out.println("Subscription " + subscription);
         this.store.addSubscription(subscription);
@@ -46,7 +46,7 @@ public class SubscriptionsResource {
 
     @DELETE
     @Path("{endpoint}")
-    @Counted(name = "unsubscribeActions", monotonic = true)
+    @Counted(name = "unsubscribeActions", absolute = true)
     public void unsubscribe(@PathParam("endpoint") String endpoint) {
         byte[] rawEndpoint = Base64.getUrlDecoder().decode(endpoint);
         this.store.remove(new String(rawEndpoint));
