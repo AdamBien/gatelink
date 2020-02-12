@@ -1,0 +1,48 @@
+*{
+    font-family:  "Helvetica Neue";
+}
+body{
+  margin:0px;
+  padding: 0px;
+}
+
+main{
+  margin: 2em;
+  display: flex;
+  height:90vh;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+button{
+  border-width: 1px;
+	border-style: solid;
+	border-radius: 2px;
+	text-decoration: none;
+	-webkit-transition: all 0.3s;
+	transition: all 0.3s;
+	display: inline-block;
+	background: #0070bc;
+  border-color: #0070bc;
+  color: #fff;
+	box-sizing: border-box;
+}
+label, .info{
+  color: #666666;
+  font-size: 0.8em;
+}
+
+.info{
+ display: inline;
+}
+
+output{
+  display: block;
+  height: 2em;
+  padding: 1em;
+  border: 0.5px solid #666666;
+}
+
+footer{
+  align-self: flex-end;
+}

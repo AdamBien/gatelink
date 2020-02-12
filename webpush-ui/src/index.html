@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>gatelink test app</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <main>
+    <header>
+      <h1>gatelink web push</h1>
+      <g-notification-output></g-notification-output>
+    </header>
+    <main>
+      <article>
+       To send an notification use the <a href="http://localhost:8080/">api client</a> and 
+       <a href="http://localhost:8080/swagger-ui/#/default/post_notifications">POST notifications</a> or 
+       <p>
+         <code>curl -X POST "http://localhost:8080/notifications" -H "accept: */*" -H "Content-Type: text/plain" -d "hello"</code>
+       </p>
+       <p>
+         <small>After <code>gatelink</code> server restart, you will have to re-register with the "subscribed to push notifications" checkbox.</small>
+       </p>
+      </article>
+    </main>
+    <footer>
+      <g-subscription-management></g-subscription-management>
+      <g-notification-management></g-notification-management>
+    </footer>
+  </main>
+  <script src="app.js" type="module"></script>
+</body>
+
+</html>
