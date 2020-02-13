@@ -1,0 +1,8 @@
+{
+    "endpoint": "https://fcm.googleapis.com/fcm/send/REPLACE",
+    "expirationTime": null,
+    "keys": {
+        "p256dh": "REPLACE",
+        "auth": "REPLACE"
+    }
+}
