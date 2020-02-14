@@ -1,6 +1,6 @@
 # gatelink
 
-WebPush Gateway
+WebPush Gateway (powered by [quarkus](https://quarkus.io))
 
 The gatelink service implements:
 
