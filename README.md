@@ -9,6 +9,31 @@ The gatelink service implements:
 
 [Push Notification Overview](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol#more_headers)
 
+# quickstart
+
+## gatelink server build & start:
+
+```
+cd gatelink
+mvn package
+java -jar target/gatelink-[VERSION]-runner.jar 
+```
+
+alternative / development mode:
+
+```
+cd gatelink
+mvn compile quarkus:dev
+```
+
+## test ui start
+
+Install [browsersync](https://www.browsersync.io)
+
+```
+cd webpush-ui
+./startBrowserSync.sh
+```
 
 ## [gatelink-ui](https://github.com/AdamBien/webpush/tree/master/webpush-ui) sample application
 
