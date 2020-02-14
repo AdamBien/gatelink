@@ -26,6 +26,14 @@ cd gatelink
 mvn compile quarkus:dev
 ```
 
+## gatelink docker build
+
+```
+mvn package
+docker build -f src/main/docker/Dockerfile.jvm -t quarkus/gatelink-jvm .
+docker run -i --rm -p 8080:8080 quarkus/gatelink-jvm
+```
+
 ## test ui start
 
 Install [browsersync](https://www.browsersync.io)
@@ -35,7 +43,7 @@ cd webpush-ui
 ./startBrowserSync.sh
 ```
 
-## [gatelink-ui](https://github.com/AdamBien/webpush/tree/master/webpush-ui) sample application
+## [webpush-ui](https://github.com/AdamBien/webpush/tree/master/webpush-ui) sample application
 
 The user interface uses
 1. [Notification API](https://developer.mozilla.org/en-US/docs/Web/API/notification) to display the badges
