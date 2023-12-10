@@ -2,16 +2,17 @@
 
 # Prerequisites
 
-Java 8+ is installed
-A Java EE 8 + MicroProfile capable server is installed.
-In case of OpenLiberty, also the HTTPS certificates for push gateways (chrome, firefox)
-have to be installed in the keystore. openJDKs come with preinstalled certificates, so 
-that JDK / openJDK stores can be directly used (`cacerts`) for that purpose.
+1. Java 21 / openJDK is installed
+2. [Maven](https://maven.apache.org/) is installed
 
 
-# Installation
+# Build
 
-Copy the `pushserver.war` into auto deployment folder.
+`mvn packge`
+
+# Run
+
+`mvn quarkus:dev`
 
 # Typical Use Case
 
