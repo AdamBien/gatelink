@@ -3,8 +3,8 @@
 package com.airhacks.gatelink.subscriptions.entity;
 
 import java.security.Security;
-import javax.json.Json;
-import javax.json.bind.JsonbBuilder;
+import jakarta.json.Json;
+import jakarta.json.bind.JsonbBuilder;
 import org.bouncycastle.jce.interfaces.ECPublicKey;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

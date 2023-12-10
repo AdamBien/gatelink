@@ -5,8 +5,8 @@ import com.airhacks.gatelink.keymanagement.control.KeyLoader;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.spec.InvalidKeySpecException;
-import javax.json.JsonObject;
-import javax.json.bind.annotation.JsonbTransient;
+import jakarta.json.JsonObject;
+import jakarta.json.bind.annotation.JsonbTransient;
 import org.bouncycastle.jce.interfaces.ECPublicKey;
 
 /**

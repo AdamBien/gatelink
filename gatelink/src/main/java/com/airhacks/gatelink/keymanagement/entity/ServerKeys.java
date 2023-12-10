@@ -2,8 +2,8 @@
 package com.airhacks.gatelink.keymanagement.entity;
 
 import java.util.Base64;
-import javax.json.Json;
-import javax.json.JsonObject;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
 import org.bouncycastle.jce.interfaces.ECPrivateKey;
 import org.bouncycastle.jce.interfaces.ECPublicKey;
 

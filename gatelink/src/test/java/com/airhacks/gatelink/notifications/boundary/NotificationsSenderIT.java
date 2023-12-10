@@ -8,7 +8,7 @@ import com.airhacks.gatelink.EncryptionTestEnvironment;
 import com.airhacks.gatelink.encryption.boundary.EncryptionServiceIT;
 import com.airhacks.gatelink.log.boundary.Tracer;
 import com.airhacks.gatelink.notifications.control.PushServiceIT;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.metrics.Counter;
 import org.eclipse.microprofile.metrics.MetricRegistry;
 import static org.hamcrest.CoreMatchers.is;

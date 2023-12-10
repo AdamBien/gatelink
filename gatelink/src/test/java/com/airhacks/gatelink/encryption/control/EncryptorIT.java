@@ -15,7 +15,7 @@ import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.spec.InvalidKeySpecException;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 import org.bouncycastle.jce.interfaces.ECPrivateKey;
 import org.bouncycastle.jce.interfaces.ECPublicKey;
 import org.junit.jupiter.api.BeforeEach;
