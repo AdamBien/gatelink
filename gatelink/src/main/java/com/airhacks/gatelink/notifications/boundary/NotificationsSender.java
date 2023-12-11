@@ -112,7 +112,7 @@ public class NotificationsSender {
         jws.setKey(serverKeys.getPrivateKey());
         jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.ECDSA_USING_P256_CURVE_AND_SHA256);
         registry.counter(audience).inc();
-        return this.pushService.send(endpoint, salt, ephemeralPublicKey, vapidPublicKey, jws.getCompactSerialization(), encryptedContent.getEncryptedContent());
+        return this.pushService.send(endpoint, salt, ephemeralPublicKey, vapidPublicKey, jws.getCompactSerialization(), encryptedContent.encryptedContent());
     }
 
     static String extractAud(String endpoint) {

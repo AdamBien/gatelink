@@ -9,28 +9,12 @@ import org.bouncycastle.jce.interfaces.ECPublicKey;
  *
  * @author airhacks.com
  */
-public class EncryptedContent {
+public record EncryptedContent(byte[] encryptedContent,byte[] salt,ECPublicKey ephemeralPublicKey){
 
-    private byte[] encryptedContent;
-    private byte[] salt;
-    private ECPublicKey ephemeralPublicKey;
 
-    public EncryptedContent(byte[] encryptedContent, byte[] salt, ECPublicKey ephemeralPublicKey) {
-        this.encryptedContent = encryptedContent;
-        this.salt = salt;
-        this.ephemeralPublicKey = ephemeralPublicKey;
-    }
-
-    public byte[] getEncryptedContent() {
-        return encryptedContent;
-    }
-
-    public byte[] getSalt() {
-        return salt;
-    }
 
     public String getEncodedSalt() {
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(this.getSalt());
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(this.salt);
     }
 
     public PublicKey getEphemeralPublicKey() {
