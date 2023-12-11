@@ -39,6 +39,22 @@ public class Encryptor {
 
     private final int TAG_SIZE = 16;
 
+    /**
+     * Checkout: https://www.rfc-editor.org/rfc/rfc8291.html
+     * @param notification
+     * @param keys
+     * @param ephemeralPublicKey
+     * @param ephemeralPrivateKey
+     * @param salt
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidAlgorithmParameterException
+     * @throws NoSuchProviderException
+     * @throws InvalidKeyException
+     * @throws NoSuchPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws BadPaddingException
+     */
     @Metered
     public byte[] encrypt(Notification notification, ServerKeys keys, ECPublicKey ephemeralPublicKey, ECPrivateKey ephemeralPrivateKey, byte[] salt) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchProviderException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 

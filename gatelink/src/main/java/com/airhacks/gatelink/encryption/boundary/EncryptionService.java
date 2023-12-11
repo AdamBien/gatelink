@@ -42,7 +42,7 @@ public class EncryptionService {
     @Metered
     public byte[] getNextSalt() {
         /*
-        *  https://tools.ietf.org/html/draft-ietf-webpush-encryption-09
+        *  https://www.rfc-editor.org/rfc/rfc8291.html
         *   3.4.  Encryption Summary
         *   salt = random(16)
          */

@@ -4,7 +4,7 @@ WebPush Gateway (powered by [quarkus](https://quarkus.io))
 
 The gatelink service implements:
 
-- [Voluntary Application Server Identification for Web Push (VAPID)](https://www.rfc-editor.org/rfc/rfc8292.html)
+- [Voluntary Application Server Identification for Web Push (VAPID / RFC8030)](https://www.rfc-editor.org/rfc/rfc8292.html)
 - [Message Encryption for Web Push](https://tools.ietf.org/html/rfc8291)
 
 [Push Notification Overview](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol#more_headers)
