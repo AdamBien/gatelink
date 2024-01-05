@@ -23,7 +23,7 @@ import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 
 /**
- *
+ * https://docs.oracle.com/en/java/javase/21/security/oracle-providers.html#GUID-091BF58C-82AB-4C9C-850F-1660824D5254
  * @author airhacks.com
  */
 public class EncryptionService {
