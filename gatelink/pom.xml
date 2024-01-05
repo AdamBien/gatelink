@@ -34,8 +34,8 @@
     </dependency>
     <dependency>
       <groupId>org.bouncycastle</groupId>
-      <artifactId>bcprov-jdk15on</artifactId>
-      <version>1.64</version>
+      <artifactId>bcprov-jdk18on</artifactId>
+      <version>1.77</version>
     </dependency>
     <dependency>
       <groupId>org.bitbucket.b_c</groupId>
@@ -66,6 +66,10 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-health</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-client-jsonb</artifactId>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
