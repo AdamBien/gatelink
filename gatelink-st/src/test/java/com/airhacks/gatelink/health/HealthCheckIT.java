@@ -8,11 +8,9 @@ import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Response;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import static org.assertj.core.api.Assertions.*;
 /**
  *
  * @author airhacks.com
@@ -32,14 +30,14 @@ public class HealthCheckIT {
     @Test
     public void health() {
         Response response = this.tut.request().get();
-        assertThat(response.getStatus(), is(200));
+        assertThat(response.getStatus()).isEqualTo(200);
         JsonObject health = response.readEntity(JsonObject.class);
         JsonArray checks = health.getJsonArray("checks");
         List<JsonObject> checkList = checks.getValuesAs(JsonObject.class);
         long checkCount = checkList.
                 stream().
                 filter(check -> "pushserver".equals(check.getString("name"))).count();
-        assertThat(checkCount, is(1l));
+        assertThat(checkCount).isEqualTo(1l);
     }
 
 

@@ -4,7 +4,6 @@ package com.airhacks.gatelink;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.WebTarget;
-import org.apache.cxf.jaxrs.provider.jsrjsonp.JsrJsonpProvider;
 
 /**
  *
@@ -16,7 +15,7 @@ public interface SystemTest {
     public final static String DEFAULT_HOST = "http://localhost:9080/";
 
     public static Client client() {
-        return ClientBuilder.newClient().register(JsrJsonpProvider.class);
+        return ClientBuilder.newClient();
     }
 
     static WebTarget configurableTarget() {
