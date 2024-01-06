@@ -1,6 +1,9 @@
+/**
+ * 
+ * @returns {Promise<boolean>}
+ */
 const isSubscribed = async () => { 
-    const registration = await navigator.serviceWorker.ready;
-    let subscription =  await registration.pushManager.getSubscription();
+    let subscription = await getSubscription();
     if (subscription) {
         return true;
     } else { 
@@ -8,5 +11,16 @@ const isSubscribed = async () => {
     }
 }
 
-export { isSubscribed }
+
+/**
+ * 
+ * @returns {Promise<PushSubscription | null>}
+ */
+const getSubscription = async () => { 
+    const registration = await navigator.serviceWorker.ready;
+    return await registration.pushManager.getSubscription();
+
+}
+
+export { isSubscribed, getSubscription }
 

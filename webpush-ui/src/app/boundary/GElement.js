@@ -8,6 +8,8 @@ export default class GElement extends HTMLElement {
 
     postConstruct() { }
 
+    view() { }
+
     viewChanged() { 
         render(this.view(),this);
     }

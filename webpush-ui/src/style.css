@@ -38,8 +38,9 @@ label, .info{
 
 output{
   display: block;
-  height: 2em;
+  height: 4em;
   padding: 1em;
+  width: 80%;
   border: 0.5px solid #666666;
 }
 
