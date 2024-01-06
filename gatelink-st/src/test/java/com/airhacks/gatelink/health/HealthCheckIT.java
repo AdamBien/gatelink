@@ -21,7 +21,7 @@ public class HealthCheckIT {
 
     @BeforeEach
     public void init() {
-        this.tut = SystemTest.context("health");
+        this.tut = SystemTest.context("q/health");
     }
 
     /**
@@ -36,8 +36,9 @@ public class HealthCheckIT {
         List<JsonObject> checkList = checks.getValuesAs(JsonObject.class);
         long checkCount = checkList.
                 stream().
-                filter(check -> "pushserver".equals(check.getString("name"))).count();
-        assertThat(checkCount).isEqualTo(1l);
+                filter(check -> "pushserver".equals(check.getString("name")))
+                .count();
+        assertThat(checkCount).isGreaterThan(1l);
     }
 
 

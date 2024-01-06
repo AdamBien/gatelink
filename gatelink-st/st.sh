@@ -1,7 +1,5 @@
 #!/bin/sh
-echo "build"
-mvn clean compile test-compile
-echo "unit test"
-mvn test
+echo "build / unit test"
+mvn clean package
 echo "system test"
 mvn failsafe:integration-test failsafe:verify
