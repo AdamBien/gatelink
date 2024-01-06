@@ -3,9 +3,9 @@
 package com.airhacks.gatelink.notifications.boundary;
 
 import com.airhacks.gatelink.SystemTest;
-import static javax.ws.rs.client.Entity.text;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
+import static jakarta.ws.rs.client.Entity.text;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.Response;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.jupiter.api.BeforeEach;
