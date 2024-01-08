@@ -11,15 +11,7 @@ import org.bouncycastle.jce.interfaces.ECPublicKey;
  *
  * @author airhacks.com
  */
-public class ServerKeys {
-
-    private ECPrivateKey privateKey;
-    private ECPublicKey publicKey;
-
-    public ServerKeys(ECPrivateKey privateKey, ECPublicKey publicKey) {
-        this.privateKey = privateKey;
-        this.publicKey = publicKey;
-    }
+public record ServerKeys(ECPrivateKey privateKey,ECPublicKey publicKey) {
 
     public byte[] getPrivateKeyAsBytes() {
         return privateKey.getD().toByteArray();
