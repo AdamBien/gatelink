@@ -2,6 +2,7 @@
 package com.airhacks.gatelink.encryption.control;
 
 import com.airhacks.gatelink.Control;
+import com.airhacks.gatelink.bytes.control.Bytes;
 import com.airhacks.gatelink.keymanagement.entity.ServerKeys;
 import com.airhacks.gatelink.notifications.boundary.Notification;
 import java.io.ByteArrayOutputStream;
@@ -40,7 +41,12 @@ public class Encryptor {
     private final int TAG_SIZE = 16;
 
     /**
+     * 
+     * ecdh_secret = ECDH(as_private, ua_public)
+     * auth_secret = <from user agent>
+     * salt = random(16)
      * Checkout: https://www.rfc-editor.org/rfc/rfc8291.html
+     * 
      * @param notification
      * @param keys
      * @param ephemeralPublicKey
@@ -56,13 +62,17 @@ public class Encryptor {
      * @throws BadPaddingException
      */
     @Metered
-    public byte[] encrypt(Notification notification, ServerKeys keys, ECPublicKey ephemeralPublicKey, ECPrivateKey ephemeralPrivateKey, byte[] salt) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchProviderException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+    public byte[] encrypt(Notification notification, ServerKeys keys, ECPublicKey ephemeralPublicKey,
+            ECPrivateKey ephemeralPrivateKey, byte[] salt)
+            throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchProviderException,
+            InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 
         ECPublicKey browserKey = notification.getPublicKey();
         byte[] secret = getKeyAgreement(browserKey, ephemeralPrivateKey);
-        byte[] context = add(getBytes("P-256"), new byte[1], convert(browserKey), convert(ephemeralPublicKey));
+        byte[] context = Bytes.add(Bytes.getBytes("P-256"), new byte[1], getPublicKeyAsBytes(browserKey), getPublicKeyAsBytes(ephemeralPublicKey));
 
-        secret = hmacKeyDerivation(secret, notification.getAuthAsBytes(), buildInfo("auth", new byte[0]), SHA_256_LENGTH);
+        secret = hmacKeyDerivation(secret, notification.getAuthAsBytes(), buildInfo("auth", new byte[0]),
+                SHA_256_LENGTH);
 
         byte[] keyInfo = buildInfo("aesgcm", context);
         byte[] nonceInfo = buildInfo("nonce", context);
@@ -76,11 +86,12 @@ public class Encryptor {
 
         byte[] twoBytes = cipher.update(new byte[2]);
         byte[] encryptedMessage = cipher.doFinal(notification.getMessageAsBytes());
-        byte[] paddedCipherText = add(twoBytes, encryptedMessage);
+        byte[] paddedCipherText = Bytes.add(twoBytes, encryptedMessage);
         return paddedCipherText;
     }
 
-    byte[] getKeyAgreement(ECPublicKey browserKey, ECPrivateKey ephemeralPrivateKey) throws NoSuchAlgorithmException, InvalidKeyException {
+    byte[] getKeyAgreement(ECPublicKey browserKey, ECPrivateKey ephemeralPrivateKey)
+            throws NoSuchAlgorithmException, InvalidKeyException {
         KeyAgreement keyAgreement = KeyAgreement.getInstance("ECDH");
         keyAgreement.init(ephemeralPrivateKey);
         keyAgreement.doPhase(browserKey, true);
@@ -89,20 +100,14 @@ public class Encryptor {
 
     static byte[] buildInfo(String type, byte[] context) {
         ByteBuffer buffer = ByteBuffer.allocate(19 + type.length() + context.length);
-        buffer.put(getBytes("Content-Encoding: "), 0, 18);
-        buffer.put(getBytes(type), 0, type.length());
+        buffer.put(Bytes.getBytes("Content-Encoding: "), 0, 18);
+        buffer.put(Bytes.getBytes(type), 0, type.length());
         buffer.put(new byte[1], 0, 1);
         buffer.put(context, 0, context.length);
         return buffer.array();
     }
 
-    static byte[] getBytes(String content) {
-        try {
-            return content.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            throw new IllegalStateException("Unsupported encoding", ex);
-        }
-   }
+
 
     static byte[] hmacKeyDerivation(byte[] ikm, byte[] salt, byte[] info, int length) {
 
@@ -113,36 +118,15 @@ public class Encryptor {
         return okm;
     }
 
-    static byte[] add(byte[]  
-        ...arrays){
-        try ( ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
-            for (byte[] array : arrays) {
-                if (array == null) {
-                    continue;
-                }
-                stream.write(array);
-            }
-            return stream.toByteArray();
-        } catch (IOException ex) {
-            throw new IllegalStateException("Array addition failed", ex);
-
-        }
-    }
     public static ECNamedCurveParameterSpec getCurveParameterSpec() {
         return ECNamedCurveTable.getParameterSpec("prime256v1");
     }
 
-    static byte[] convert(ECPublicKey publicKey) {
+    // todo javadoc
+    static byte[] getPublicKeyAsBytes(ECPublicKey publicKey) {
         byte[] bytes = publicKey.getQ().getEncoded(false);
-        return add(unsignedIntToBytes(bytes.length), bytes);
+        var length = Bytes.unsignedIntToBytes(bytes.length);
+        return Bytes.add(length, bytes);
     }
-
-    static byte[] unsignedIntToBytes(int number) {
-        byte result[] = new byte[2];
-        result[1] = (byte) (number & 0xFF);
-        result[0] = (byte) (number >> 8);
-        return result;
-    }
-
 
 }

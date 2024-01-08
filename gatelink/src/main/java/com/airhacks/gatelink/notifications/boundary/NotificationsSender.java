@@ -1,27 +1,17 @@
 
 package com.airhacks.gatelink.notifications.boundary;
 
-import com.airhacks.gatelink.Boundary;
-import com.airhacks.gatelink.encryption.boundary.EncryptionService;
-import com.airhacks.gatelink.encryption.entity.EncryptedContent;
-import com.airhacks.gatelink.keymanagement.boundary.KeyStore;
-import com.airhacks.gatelink.keymanagement.entity.ServerKeys;
-import com.airhacks.gatelink.log.boundary.Tracer;
-import com.airhacks.gatelink.notifications.control.PushService;
-import com.airhacks.gatelink.subscriptions.control.SubscriptionsStore;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.util.List;
-import java.util.stream.Collectors;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.core.Response;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.metrics.MetricRegistry;
 import org.eclipse.microprofile.metrics.annotation.Counted;
@@ -30,6 +20,18 @@ import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.lang.JoseException;
+
+import com.airhacks.gatelink.Boundary;
+import com.airhacks.gatelink.encryption.boundary.EncryptionService;
+import com.airhacks.gatelink.encryption.entity.EncryptedContent;
+import com.airhacks.gatelink.keymanagement.boundary.KeyStore;
+import com.airhacks.gatelink.keymanagement.entity.ServerKeys;
+import com.airhacks.gatelink.log.boundary.Tracer;
+import com.airhacks.gatelink.notifications.control.PushService;
+import com.airhacks.gatelink.subscriptions.control.SubscriptionsStore;
+
+import jakarta.inject.Inject;
+import jakarta.ws.rs.core.Response;
 
 /**
  *
@@ -70,12 +72,10 @@ public class NotificationsSender {
         tracer.log("Sending " + message);
         ServerKeys serverKeys = this.keyStore.getKeys();
 
-        List<Response> responses = this.store.
-                all().
-                stream().
-                map(s -> new Notification(s, message)).
-                map(n -> this.send(n, serverKeys)).
-                collect(Collectors.toList());
+        this.store.all()
+                .stream()
+                .map(s -> new Notification(s, message))
+                .forEach(n -> this.send(n, serverKeys));
     }
 
     public Response send(Notification notification, ServerKeys serverKeys) {
@@ -86,14 +86,15 @@ public class NotificationsSender {
             tracer.log("Sending to: " + endpoint);
             response = this.sendEncryptedMessage(serverKeys, endpoint, encryptedContent);
             registry.counter("responses_" + response.getStatus()).inc();
-        } catch (JoseException | NoSuchAlgorithmException | InvalidAlgorithmParameterException | NoSuchProviderException | InvalidKeyException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException ex) {
+        } catch (JoseException | NoSuchAlgorithmException | InvalidAlgorithmParameterException | NoSuchProviderException
+                | InvalidKeyException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException ex) {
             throw new IllegalStateException("Cannot encrypt", ex);
         }
         return response;
     }
 
-
-    public Response sendEncryptedMessage(ServerKeys serverKeys, String endpoint, EncryptedContent encryptedContent) throws JoseException {
+    public Response sendEncryptedMessage(ServerKeys serverKeys, String endpoint, EncryptedContent encryptedContent)
+            throws JoseException {
         tracer.log("Sending to endpoint " + endpoint);
         String audience = extractAud(endpoint);
         String salt = encryptedContent.getEncodedSalt();
@@ -112,7 +113,8 @@ public class NotificationsSender {
         jws.setKey(serverKeys.getPrivateKey());
         jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.ECDSA_USING_P256_CURVE_AND_SHA256);
         registry.counter(audience).inc();
-        return this.pushService.send(endpoint, salt, ephemeralPublicKey, vapidPublicKey, jws.getCompactSerialization(), encryptedContent.encryptedContent());
+        return this.pushService.send(endpoint, salt, ephemeralPublicKey, vapidPublicKey, jws.getCompactSerialization(),
+                encryptedContent.encryptedContent());
     }
 
     static String extractAud(String endpoint) {
@@ -126,7 +128,5 @@ public class NotificationsSender {
         String protocol = uri.getProtocol();
         return String.format("%s://%s", protocol, host);
     }
-
-
 
 }

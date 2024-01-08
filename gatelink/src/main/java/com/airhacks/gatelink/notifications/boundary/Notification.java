@@ -1,6 +1,7 @@
 
 package com.airhacks.gatelink.notifications.boundary;
 
+import com.airhacks.gatelink.bytes.control.Bytes;
 import com.airhacks.gatelink.subscriptions.entity.Subscription;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
@@ -46,16 +47,12 @@ public class Notification {
     }
 
     static byte[] convertAuth(String auth) {
-        byte[] content = auth.getBytes(StandardCharsets.UTF_8);
+        var content = Bytes.getBytes(auth);
         return Base64.getUrlDecoder().decode(content);
     }
 
     public byte[] getMessageAsBytes() {
-        try {
-            return this.message.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            throw new IllegalStateException("Cannot encode bytes", ex);
-        }
+       return Bytes.getBytes(this.message);
     }
 
     public String getEndpoint() {

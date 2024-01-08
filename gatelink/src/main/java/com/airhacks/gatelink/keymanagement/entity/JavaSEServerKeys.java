@@ -18,8 +18,9 @@ public record JavaSEServerKeys(ECPrivateKey privateKey,ECPublicKey publicKey) {
     }
 
     public byte[] getUncompressedPublicKey() {
-        return new byte[0];
+        //return new byte[0];
         //return publicKey.getQ().getEncoded(false);
+        return publicKey.getEncoded();
     }
 
     public String getBase64URLEncodedPrivateKeyWithoutPadding() {
