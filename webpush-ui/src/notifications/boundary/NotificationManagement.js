@@ -4,11 +4,11 @@ import { askForNotification,areNotificationsGranted} from '../control/Notificati
 class NotificationManagement extends GElement {
     
     async postConstruct() {
-        let status = 'browser does not support permissions';
         if (navigator.permissions && navigator.permissions.query) { 
-            status = await navigator.permissions.query({ 'name': "notifications" });
+            let status = await navigator.permissions.query({ 'name': "notifications" });
+            console.dir(status);
         }
-        console.dir(status);
+        console.log('browser does not support permissions');
     }
 
     view() { 
