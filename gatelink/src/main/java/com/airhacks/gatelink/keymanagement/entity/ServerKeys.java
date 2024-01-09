@@ -1,15 +1,13 @@
 
 package com.airhacks.gatelink.keymanagement.entity;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.Base64;
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
+
 import org.bouncycastle.jce.interfaces.ECPrivateKey;
 import org.bouncycastle.jce.interfaces.ECPublicKey;
 
-import com.airhacks.gatelink.bytes.control.Bytes;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
 
 /**
  *
@@ -54,10 +52,10 @@ public record ServerKeys(ECPrivateKey privateKey,ECPublicKey publicKey) {
 
 
     public JsonObject toJson() {
-        return Json.createObjectBuilder().
-                add("publicKey", getBase64URLEncodedPublicKeyWithoutPadding()).
-                add("privateKey", getBase64URLEncodedPrivateKeyWithoutPadding()).
-                build();
+        return Json.createObjectBuilder()
+                .add("publicKey", getBase64URLEncodedPublicKeyWithoutPadding())
+                .add("privateKey", getBase64URLEncodedPrivateKeyWithoutPadding())
+                .build();
     }
 
 }

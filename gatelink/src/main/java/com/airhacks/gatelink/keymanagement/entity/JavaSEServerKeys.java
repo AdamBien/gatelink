@@ -4,6 +4,9 @@ package com.airhacks.gatelink.keymanagement.entity;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.util.Base64;
+
+import org.bouncycastle.util.test.FixedSecureRandom.BigInteger;
+
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 
@@ -22,6 +25,7 @@ public record JavaSEServerKeys(ECPrivateKey privateKey,ECPublicKey publicKey) {
         //return publicKey.getQ().getEncoded(false);
         return publicKey.getEncoded();
     }
+
 
     public String getBase64URLEncodedPrivateKeyWithoutPadding() {
         return Base64.getUrlEncoder().withoutPadding().encodeToString(getPrivateKeyAsBytes());

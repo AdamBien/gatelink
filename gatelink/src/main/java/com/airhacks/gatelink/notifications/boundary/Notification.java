@@ -1,15 +1,15 @@
 
 package com.airhacks.gatelink.notifications.boundary;
 
-import com.airhacks.gatelink.bytes.control.Bytes;
-import com.airhacks.gatelink.subscriptions.entity.Subscription;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
+
 import org.bouncycastle.jce.interfaces.ECPublicKey;
+
+import com.airhacks.gatelink.bytes.control.Bytes;
+import com.airhacks.gatelink.subscriptions.entity.Subscription;
 
 /**
  *
