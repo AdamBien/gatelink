@@ -3,9 +3,9 @@ package com.airhacks.gatelink.keymanagement.entity;
 
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
+import java.security.spec.ECPoint;
+import java.util.Arrays;
 import java.util.Base64;
-
-import org.bouncycastle.util.test.FixedSecureRandom.BigInteger;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -21,10 +21,32 @@ public record JavaSEServerKeys(ECPrivateKey privateKey,ECPublicKey publicKey) {
     }
 
     public byte[] getUncompressedPublicKey() {
-        //return new byte[0];
-        //return publicKey.getQ().getEncoded(false);
-        return publicKey.getEncoded();
+        var ecPoint = publicKey.getW();
+        return decompressedRepresentation(ecPoint);
     }
+    /**
+     * The length of the public key is: 65 hex digits (bytes)
+     * @param ecPoint
+     * @return
+     */
+    static byte[] decompressedRepresentation(ECPoint ecPoint) {
+        var xArray = stripLeadingZeros(ecPoint.getAffineX().toByteArray());
+        var yArray = stripLeadingZeros(ecPoint.getAffineY().toByteArray());
+        var result = new byte[65];
+        result[0] = 4;
+        System.arraycopy(xArray, 0, result, 1, xArray.length);
+        System.arraycopy(yArray, 0, result, 33, yArray.length);
+        return result;
+
+    } 
+
+    static byte[] stripLeadingZeros(byte[] data) {
+        int nonZeroIndex = 0;
+        while (nonZeroIndex < data.length && data[nonZeroIndex] == 0) 
+            nonZeroIndex++;
+        return Arrays.copyOfRange(data, nonZeroIndex, data.length);
+    }
+    
 
 
     public String getBase64URLEncodedPrivateKeyWithoutPadding() {
