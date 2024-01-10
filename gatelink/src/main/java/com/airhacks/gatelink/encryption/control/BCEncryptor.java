@@ -1,18 +1,12 @@
 
 package com.airhacks.gatelink.encryption.control;
 
-import com.airhacks.gatelink.Control;
-import com.airhacks.gatelink.bytes.control.Bytes;
-import com.airhacks.gatelink.keymanagement.entity.BCServerKeys;
-import com.airhacks.gatelink.notifications.boundary.Notification;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -20,6 +14,7 @@ import javax.crypto.KeyAgreement;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.generators.HKDFBytesGenerator;
 import org.bouncycastle.crypto.params.HKDFParameters;
@@ -29,12 +24,17 @@ import org.bouncycastle.jce.interfaces.ECPublicKey;
 import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 
+import com.airhacks.gatelink.Control;
+import com.airhacks.gatelink.bytes.control.Bytes;
+import com.airhacks.gatelink.keymanagement.entity.BCServerKeys;
+import com.airhacks.gatelink.notifications.boundary.Notification;
+
 /**
  *
  * @author airhacks.com
  */
 @Control
-public class Encryptor {
+public class BCEncryptor {
 
     public static final int SHA_256_LENGTH = 32;
 

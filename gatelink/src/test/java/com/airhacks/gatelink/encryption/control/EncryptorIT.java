@@ -2,7 +2,7 @@
  */
 package com.airhacks.gatelink.encryption.control;
 
-import com.airhacks.gatelink.encryption.control.Encryptor;
+import com.airhacks.gatelink.encryption.control.BCEncryptor;
 import com.airhacks.gatelink.EncryptionTestEnvironment;
 import com.airhacks.gatelink.encryption.boundary.EncryptionService;
 import com.airhacks.gatelink.encryption.entity.EncryptedContent;
@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
  */
 public class EncryptorIT extends EncryptionTestEnvironment {
 
-    private Encryptor cut;
+    private BCEncryptor cut;
     private ECPublicKey ephemeralPublic;
     private ECPrivateKey ephemeralPrivate;
     private byte[] salt;
@@ -42,7 +42,7 @@ public class EncryptorIT extends EncryptionTestEnvironment {
         this.ephemeralPublic = (ECPublicKey) ephemeralKeys.getPublic();
         this.ephemeralPrivate = (ECPrivateKey) ephemeralKeys.getPrivate();
         this.salt = service.getNextSalt();
-        this.cut = new Encryptor();
+        this.cut = new BCEncryptor();
     }
 
 

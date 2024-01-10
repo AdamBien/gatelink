@@ -1,7 +1,7 @@
 
 package com.airhacks.gatelink.keymanagement.control;
 
-import com.airhacks.gatelink.encryption.control.Encryptor;
+import com.airhacks.gatelink.encryption.control.BCEncryptor;
 import com.airhacks.gatelink.keymanagement.boundary.KeyGenerationException;
 import com.airhacks.gatelink.keymanagement.entity.BCServerKeys;
 import java.security.InvalidAlgorithmParameterException;
@@ -31,7 +31,7 @@ public class BCKeyGenerator {
     }
     public BCServerKeys generateVapidKeys() {
 
-        ECNamedCurveParameterSpec parameterSpec = Encryptor.getCurveParameterSpec();
+        ECNamedCurveParameterSpec parameterSpec = BCEncryptor.getCurveParameterSpec();
         try {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDH", BouncyCastleProvider.PROVIDER_NAME);
 

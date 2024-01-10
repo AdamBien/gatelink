@@ -17,7 +17,7 @@ import org.bouncycastle.jce.interfaces.ECPrivateKey;
 import org.bouncycastle.jce.interfaces.ECPublicKey;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 
-import com.airhacks.gatelink.encryption.control.Encryptor;
+import com.airhacks.gatelink.encryption.control.BCEncryptor;
 import com.airhacks.gatelink.encryption.entity.EncryptedContent;
 import com.airhacks.gatelink.keymanagement.entity.BCServerKeys;
 import com.airhacks.gatelink.notifications.boundary.Notification;
@@ -32,7 +32,7 @@ import jakarta.inject.Inject;
 public class EncryptionService {
 
     @Inject
-    Encryptor encryptor;
+    BCEncryptor encryptor;
 
     SecureRandom random;
 
@@ -66,7 +66,7 @@ public class EncryptionService {
     }
 
     public KeyPair generateEphemeralKeys() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
-        var parameterSpec = Encryptor.getCurveParameterSpec();
+        var parameterSpec = BCEncryptor.getCurveParameterSpec();
         var keyPairGenerator = KeyPairGenerator.getInstance("ECDH", "BC");
         keyPairGenerator.initialize(parameterSpec);
 

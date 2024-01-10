@@ -10,7 +10,7 @@ import java.security.spec.ECGenParameterSpec;
 import com.airhacks.gatelink.keymanagement.boundary.KeyGenerationException;
 import com.airhacks.gatelink.keymanagement.entity.JavaSEServerKeys;
 
-public class JavaSEKeyGenerator {
+public class JCEKeyGenerator {
 
     public JavaSEServerKeys generateVapidKeys() {
 
