@@ -2,8 +2,8 @@ package com.airhacks.gatelink.keygeneration;
 
 import com.airhacks.gatelink.keymanagement.control.KeyGenerator;
 import com.airhacks.gatelink.keymanagement.entity.ServerKeys;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,8 +34,8 @@ public class KeyGeneratorTest {
          * https://tools.ietf.org/html/rfc5480 "The uncompressed form is
          * indicated by 0x04..."
          */
-        assertThat(publicKey[0], is((byte) 0x04));
-        assertThat(publicKey.length, is(65));
+        assertThat(publicKey[0]).isEqualTo((byte) 0x04);
+        assertThat(publicKey.length).isEqualTo(65);
 
         System.out.println(vapidKeys.getBase64URLEncodedPublicKeyWithoutPadding());
         System.out.println("---");

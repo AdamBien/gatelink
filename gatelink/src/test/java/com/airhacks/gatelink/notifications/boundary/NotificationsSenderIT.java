@@ -11,11 +11,11 @@ import com.airhacks.gatelink.notifications.control.PushServiceIT;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.metrics.Counter;
 import org.eclipse.microprofile.metrics.MetricRegistry;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -53,7 +53,7 @@ public class NotificationsSenderIT extends EncryptionTestEnvironment {
         Notification notification = this.serverKeysWithSubscription.getNotification("hey duke " + System.currentTimeMillis());
         Response response = this.cut.send(notification, this.serverKeysWithSubscription.getServerKeys());
         int status = response.getStatus();
-        assertThat(status, is(201));
+        assertThat(status).isEqualTo(201);
         response.getHeaders().entrySet().forEach(e -> System.out.printf("%s -> %s \n", e.getKey(), e.getValue()));
         String responseMessage = response.readEntity(String.class);
         System.out.println("responseMessage = " + responseMessage);

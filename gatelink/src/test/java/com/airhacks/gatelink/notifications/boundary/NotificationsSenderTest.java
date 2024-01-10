@@ -3,8 +3,9 @@
 package com.airhacks.gatelink.notifications.boundary;
 
 import com.airhacks.gatelink.notifications.boundary.NotificationsSender;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,14 +25,14 @@ public class NotificationsSenderTest {
     @Test
     public void extractHostFromAudience() throws Exception {
         String aud = NotificationsSender.extractAud(endpoint);
-        assertThat(aud, is("https://updates.push.services.mozilla.com"));
+        assertThat(aud).isEqualTo("https://updates.push.services.mozilla.com");
     }
 
     @Test
     public void extractInvalidHostForAudience() throws Exception {
         String expected = "invalid";
         String actual = NotificationsSender.extractAud(expected);
-        assertThat(actual, is(expected));
+        assertThat(actual).isEqualTo(expected);
     }
 
 }
