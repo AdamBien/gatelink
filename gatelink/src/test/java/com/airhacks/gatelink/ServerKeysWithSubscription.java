@@ -1,8 +1,8 @@
 
 package com.airhacks.gatelink;
 
-import com.airhacks.gatelink.keymanagement.control.KeyLoader;
-import com.airhacks.gatelink.keymanagement.entity.ServerKeys;
+import com.airhacks.gatelink.keymanagement.control.BCKeyLoader;
+import com.airhacks.gatelink.keymanagement.entity.BCServerKeys;
 import com.airhacks.gatelink.notifications.boundary.Notification;
 import com.airhacks.gatelink.subscriptions.entity.Subscription;
 import java.io.IOException;
@@ -33,8 +33,8 @@ public class ServerKeysWithSubscription {
         this.serverPublicKeyAsString = serverKeys.publicKey;
         this.serverPrivateKeyAsString = serverKeys.privateKey;
 
-        this.serverPublicKey = KeyLoader.loadUrlEncodedPublicKey(serverPublicKeyAsString);
-        this.serverPrivateKey = KeyLoader.loadURLEncodedPrivateKey(serverPrivateKeyAsString);
+        this.serverPublicKey = BCKeyLoader.loadUrlEncodedPublicKey(serverPublicKeyAsString);
+        this.serverPrivateKey = BCKeyLoader.loadURLEncodedPrivateKey(serverPrivateKeyAsString);
 
         this.subscription = DataLoader.fromJson(String.format("%s.json", browserData), Subscription.class);
 
@@ -60,8 +60,8 @@ public class ServerKeysWithSubscription {
         return new Notification(subscription, message);
     }
 
-    public ServerKeys getServerKeys() {
-        return new ServerKeys(serverPrivateKey, serverPublicKey);
+    public BCServerKeys getServerKeys() {
+        return new BCServerKeys(serverPrivateKey, serverPublicKey);
     }
 
 

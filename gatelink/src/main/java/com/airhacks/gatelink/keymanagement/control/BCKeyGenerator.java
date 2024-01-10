@@ -3,7 +3,7 @@ package com.airhacks.gatelink.keymanagement.control;
 
 import com.airhacks.gatelink.encryption.control.Encryptor;
 import com.airhacks.gatelink.keymanagement.boundary.KeyGenerationException;
-import com.airhacks.gatelink.keymanagement.entity.ServerKeys;
+import com.airhacks.gatelink.keymanagement.entity.BCServerKeys;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -22,14 +22,14 @@ import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
  * @author airhacks.com
  */
 @ApplicationScoped
-public class KeyGenerator {
+public class BCKeyGenerator {
 
     @PostConstruct
     public void initializeProvider() {
         Security.addProvider(new BouncyCastleProvider());
 
     }
-    public ServerKeys generateVapidKeys() {
+    public BCServerKeys generateVapidKeys() {
 
         ECNamedCurveParameterSpec parameterSpec = Encryptor.getCurveParameterSpec();
         try {
@@ -39,7 +39,7 @@ public class KeyGenerator {
             KeyPair serverKey = keyPairGenerator.generateKeyPair();
             ECPrivateKey privateKey = (ECPrivateKey) serverKey.getPrivate();
             ECPublicKey publicKey = (ECPublicKey) serverKey.getPublic();
-            return new ServerKeys(privateKey, publicKey);
+            return new BCServerKeys(privateKey, publicKey);
 
         } catch (InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchProviderException ex) {
             throw new KeyGenerationException(ex.getMessage());

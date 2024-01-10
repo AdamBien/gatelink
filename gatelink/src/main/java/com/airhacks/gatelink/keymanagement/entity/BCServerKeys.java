@@ -13,7 +13,7 @@ import jakarta.json.JsonObject;
  *
  * @author airhacks.com
  */
-public record ServerKeys(ECPrivateKey privateKey,ECPublicKey publicKey) {
+public record BCServerKeys(ECPrivateKey privateKey,ECPublicKey publicKey) {
 
     public byte[] getPrivateKeyAsBytes() {
         return privateKey.getD().toByteArray();

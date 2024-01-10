@@ -3,7 +3,7 @@ package com.airhacks.gatelink.encryption.control;
 
 import com.airhacks.gatelink.Control;
 import com.airhacks.gatelink.bytes.control.Bytes;
-import com.airhacks.gatelink.keymanagement.entity.ServerKeys;
+import com.airhacks.gatelink.keymanagement.entity.BCServerKeys;
 import com.airhacks.gatelink.notifications.boundary.Notification;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -62,7 +62,7 @@ public class Encryptor {
      * @throws BadPaddingException
      */
     @Metered
-    public byte[] encrypt(Notification notification, ServerKeys keys, ECPublicKey ephemeralPublicKey,
+    public byte[] encrypt(Notification notification, BCServerKeys keys, ECPublicKey ephemeralPublicKey,
             ECPrivateKey ephemeralPrivateKey, byte[] salt)
             throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchProviderException,
             InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {

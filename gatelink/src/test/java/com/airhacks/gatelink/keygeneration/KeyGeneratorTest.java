@@ -1,7 +1,7 @@
 package com.airhacks.gatelink.keygeneration;
 
-import com.airhacks.gatelink.keymanagement.control.KeyGenerator;
-import com.airhacks.gatelink.keymanagement.entity.ServerKeys;
+import com.airhacks.gatelink.keymanagement.control.BCKeyGenerator;
+import com.airhacks.gatelink.keymanagement.entity.BCServerKeys;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -14,17 +14,17 @@ import org.junit.jupiter.api.Test;
  */
 public class KeyGeneratorTest {
 
-    private KeyGenerator cut;
+    private BCKeyGenerator cut;
 
     @BeforeEach
     public void init() {
-        this.cut = new KeyGenerator();
+        this.cut = new BCKeyGenerator();
         this.cut.initializeProvider();
     }
 
     @Test
     public void createKeys() throws Exception {
-        ServerKeys vapidKeys = this.cut.generateVapidKeys();
+        BCServerKeys vapidKeys = this.cut.generateVapidKeys();
         byte[] privateKey = vapidKeys.getPrivateKeyAsBytes();
         assertNotNull(privateKey);
 

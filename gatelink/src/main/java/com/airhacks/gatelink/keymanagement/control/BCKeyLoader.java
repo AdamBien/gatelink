@@ -20,7 +20,7 @@ import org.bouncycastle.math.ec.ECPoint;
  *
  * @author airhacks.com
  */
-public interface KeyLoader {
+public interface BCKeyLoader {
 
     public static ECPublicKey loadUrlEncodedPublicKey(String content) throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException {
         byte[] decodedPublicKey = Base64.getUrlDecoder().decode(content);

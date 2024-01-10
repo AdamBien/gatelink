@@ -25,7 +25,7 @@ import com.airhacks.gatelink.Boundary;
 import com.airhacks.gatelink.encryption.boundary.EncryptionService;
 import com.airhacks.gatelink.encryption.entity.EncryptedContent;
 import com.airhacks.gatelink.keymanagement.boundary.KeyStore;
-import com.airhacks.gatelink.keymanagement.entity.ServerKeys;
+import com.airhacks.gatelink.keymanagement.entity.BCServerKeys;
 import com.airhacks.gatelink.log.boundary.Tracer;
 import com.airhacks.gatelink.notifications.control.PushService;
 import com.airhacks.gatelink.subscriptions.control.SubscriptionsStore;
@@ -70,7 +70,7 @@ public class NotificationsSender {
     @Counted(absolute = true, name = "forwardedMessages")
     public void send(String message) {
         tracer.log("Sending " + message);
-        ServerKeys serverKeys = this.keyStore.getKeys();
+        BCServerKeys serverKeys = this.keyStore.getKeys();
 
         this.store.all()
                 .stream()
@@ -78,7 +78,7 @@ public class NotificationsSender {
                 .forEach(n -> this.send(n, serverKeys));
     }
 
-    public Response send(Notification notification, ServerKeys serverKeys) {
+    public Response send(Notification notification, BCServerKeys serverKeys) {
         Response response = null;
         try {
             EncryptedContent encryptedContent = this.encryptionService.encrypt(notification, serverKeys);
@@ -93,7 +93,7 @@ public class NotificationsSender {
         return response;
     }
 
-    public Response sendEncryptedMessage(ServerKeys serverKeys, String endpoint, EncryptedContent encryptedContent)
+    public Response sendEncryptedMessage(BCServerKeys serverKeys, String endpoint, EncryptedContent encryptedContent)
             throws JoseException {
         tracer.log("Sending to endpoint " + endpoint);
         String audience = extractAud(endpoint);
