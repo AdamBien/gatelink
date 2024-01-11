@@ -11,9 +11,9 @@ import java.security.spec.ECPoint;
 import java.security.spec.ECPrivateKeySpec;
 import java.security.spec.ECPublicKeySpec;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Arrays;
 import java.util.Base64;
 
+import com.airhacks.gatelink.bytes.control.Bytes;
 import com.airhacks.gatelink.encryption.control.JCEEncryptor;
 
 
@@ -28,12 +28,24 @@ public interface JCEKeyLoader {
         return loadPublicKeyFromBytes(decodedPublicKey);
     }
 
-    static ECPublicKey loadPublicKeyFromBytes(byte[] keyContent) throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException {
+    static ECPublicKey loadPublicKeyFromBytes(byte[] keyContent)
+            throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException {
+        /**
+         * x and y coordinates have the same length (32). 
+         * The first byte is the indicator. 0x4 means public key
+         */
+        int expectedLength = (65-1)/2;
+        var indicator = keyContent[0];
+        if(indicator != 4){
+            throw new IllegalArgumentException("Parameter does not represent a public key");
+        }
+        System.out.println(" length " + keyContent.length);
+        System.out.println(" first byte " + keyContent[0]);
         var parameterSpec = JCEEncryptor.getParameterSpec();
         KeyFactory kf = KeyFactory.getInstance("EC");
-        byte[] x = Arrays.copyOfRange(keyContent, 0, keyContent.length/2);
-        byte[] y = Arrays.copyOfRange(keyContent, keyContent.length/2, keyContent.length);
-        var w = new ECPoint(new BigInteger(1,x), new BigInteger(1,y));
+        var x = Bytes.fromUnsignedByteArray(keyContent, 1, expectedLength);
+        var y = Bytes.fromUnsignedByteArray(keyContent, 1 + expectedLength, expectedLength);
+        var w = new ECPoint(x, y);
         return (ECPublicKey) kf.generatePublic(new ECPublicKeySpec(w, parameterSpec));
     }
 

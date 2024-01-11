@@ -6,21 +6,20 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
-import java.security.interfaces.ECPublicKey;
+import java.security.Security;
 import java.security.interfaces.ECPrivateKey;
+import java.security.interfaces.ECPublicKey;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 
-import com.airhacks.gatelink.encryption.control.BCEncryptor;
 import com.airhacks.gatelink.encryption.control.JCEEncryptor;
-import com.airhacks.gatelink.encryption.entity.EncryptedContent;
 import com.airhacks.gatelink.encryption.entity.JCEEncryptedContent;
 import com.airhacks.gatelink.keymanagement.control.JCEKeyGenerator;
-import com.airhacks.gatelink.keymanagement.entity.BCServerKeys;
 import com.airhacks.gatelink.keymanagement.entity.JCEServerKeys;
 import com.airhacks.gatelink.notifications.boundary.Notification;
 
@@ -40,6 +39,7 @@ public class JCEEncryptionService {
 
     @PostConstruct
     public void init() {
+        Security.addProvider(new BouncyCastleProvider());
         this.random = new SecureRandom();
 
     }
@@ -64,10 +64,5 @@ public class JCEEncryptionService {
         var salt = this.getNextSalt();
         var encryptedContent = this.encryptor.encrypt(notification, keys, serverEphemeralPublic, ephemeralPrivateKey, salt);
         return new JCEEncryptedContent(encryptedContent, salt, serverEphemeralPublic);
-
     }
-
-
-
-
 }
