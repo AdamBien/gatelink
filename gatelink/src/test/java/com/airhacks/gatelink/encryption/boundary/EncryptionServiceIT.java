@@ -2,11 +2,10 @@
  */
 package com.airhacks.gatelink.encryption.boundary;
 
-import com.airhacks.gatelink.encryption.boundary.EncryptionService;
+import org.junit.jupiter.api.BeforeEach;
+
 import com.airhacks.gatelink.encryption.control.BCEncryptor;
 import com.airhacks.gatelink.encryption.control.JCEEncryptor;
-
-import org.junit.jupiter.api.BeforeEach;
 
 /**
  *
@@ -14,16 +13,16 @@ import org.junit.jupiter.api.BeforeEach;
  */
 public class EncryptionServiceIT {
 
-    private EncryptionService cut;
+    private JCEEncryptionService cut;
 
     @BeforeEach
     public void init() {
-        this.cut = new EncryptionService();
+        this.cut = new JCEEncryptionService();
         this.cut.init();
-        this.cut.encryptor = new BCEncryptor();
+        this.cut.encryptor = new JCEEncryptor();
     }
 
-    public EncryptionService getCut() {
+    public JCEEncryptionService getCut() {
         this.init();
         return cut;
     }

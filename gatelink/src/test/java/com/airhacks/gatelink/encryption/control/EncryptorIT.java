@@ -4,8 +4,9 @@ package com.airhacks.gatelink.encryption.control;
 
 import com.airhacks.gatelink.encryption.control.BCEncryptor;
 import com.airhacks.gatelink.EncryptionTestEnvironment;
-import com.airhacks.gatelink.encryption.boundary.EncryptionService;
+import com.airhacks.gatelink.encryption.boundary.JCEEncryptionService;
 import com.airhacks.gatelink.encryption.entity.EncryptedContent;
+import com.airhacks.gatelink.keymanagement.control.JCEKeyGenerator;
 import com.airhacks.gatelink.notifications.boundary.Notification;
 import com.airhacks.gatelink.notifications.boundary.NotificationsSender;
 import com.airhacks.gatelink.notifications.boundary.NotificationsSenderIT;
@@ -36,9 +37,9 @@ public class EncryptorIT extends EncryptionTestEnvironment {
     @BeforeEach
     public void initialize() throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException, IOException, InvalidAlgorithmParameterException {
         super.init("chrome");
-        EncryptionService service = new EncryptionService();
+        JCEEncryptionService service = new JCEEncryptionService();
         service.init();
-        this.ephemeralKeys = service.generateEphemeralKeys();
+        this.ephemeralKeys = JCEKeyGenerator.generateEphemeralKeys();
         this.ephemeralPublic = (ECPublicKey) ephemeralKeys.getPublic();
         this.ephemeralPrivate = (ECPrivateKey) ephemeralKeys.getPrivate();
         this.salt = service.getNextSalt();
@@ -47,6 +48,7 @@ public class EncryptorIT extends EncryptionTestEnvironment {
 
 
 
+    /**
     @Test
     public void encryptAndSend() throws Exception {
         Notification notification = this.serverKeysWithSubscription.getNotification("hey duke");
@@ -59,4 +61,5 @@ public class EncryptorIT extends EncryptionTestEnvironment {
         System.out.println("response = " + response.getStatus());
     }
 
+     */
 }

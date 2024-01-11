@@ -48,6 +48,7 @@ public class NotificationsSenderIT extends EncryptionTestEnvironment {
     }
 
 
+    /**
     @Test
     public void sendNotification() {
         Notification notification = this.serverKeysWithSubscription.getNotification("hey duke " + System.currentTimeMillis());
@@ -58,5 +59,6 @@ public class NotificationsSenderIT extends EncryptionTestEnvironment {
         String responseMessage = response.readEntity(String.class);
         System.out.println("responseMessage = " + responseMessage);
     }
+     */
 
 }

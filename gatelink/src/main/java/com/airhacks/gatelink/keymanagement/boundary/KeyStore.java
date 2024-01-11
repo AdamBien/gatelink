@@ -2,7 +2,10 @@
 package com.airhacks.gatelink.keymanagement.boundary;
 
 import com.airhacks.gatelink.keymanagement.control.BCKeyGenerator;
+import com.airhacks.gatelink.keymanagement.control.JCEKeyGenerator;
 import com.airhacks.gatelink.keymanagement.entity.BCServerKeys;
+import com.airhacks.gatelink.keymanagement.entity.JCEServerKeys;
+
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -14,18 +17,16 @@ import jakarta.inject.Inject;
 @ApplicationScoped
 public class KeyStore {
 
-    private BCServerKeys keys;
+    private JCEServerKeys keys;
 
-    @Inject
-    BCKeyGenerator generator;
 
     @PostConstruct
     public void initializeProvider() {
-        this.keys = this.generator.generateVapidKeys();
+        this.keys = JCEKeyGenerator.generateVapidKeys();
         this.keys.logKeys();
     }
 
-    public BCServerKeys getKeys() {
+    public JCEServerKeys getKeys() {
         return this.keys;
     }
 
