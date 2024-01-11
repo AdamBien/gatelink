@@ -14,7 +14,7 @@ import jakarta.json.JsonObject;
  *
  * @author airhacks.com
  */
-public record JavaSEServerKeys(ECPrivateKey privateKey,ECPublicKey publicKey) {
+public record JCEServerKeys(ECPrivateKey privateKey,ECPublicKey publicKey) {
 
     public byte[] getPrivateKeyAsBytes() {
         return privateKey.getS().toByteArray();
@@ -24,12 +24,18 @@ public record JavaSEServerKeys(ECPrivateKey privateKey,ECPublicKey publicKey) {
         var ecPoint = publicKey.getW();
         return decompressedRepresentation(ecPoint);
     }
+
+
+    public static byte[] decompressedRepresentation(ECPublicKey publicKey) {
+        return decompressedRepresentation(publicKey.getW());
+    }
+
     /**
      * The length of the public key is: 65 hex digits (bytes)
      * @param ecPoint
      * @return
      */
-    static byte[] decompressedRepresentation(ECPoint ecPoint) {
+    public static byte[] decompressedRepresentation(ECPoint ecPoint) {
         var xArray = stripLeadingZeros(ecPoint.getAffineX().toByteArray());
         var yArray = stripLeadingZeros(ecPoint.getAffineY().toByteArray());
         var result = new byte[65];

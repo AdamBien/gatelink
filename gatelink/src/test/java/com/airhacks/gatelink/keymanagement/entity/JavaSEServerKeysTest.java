@@ -10,7 +10,7 @@ public class JavaSEServerKeysTest {
     void stripLeadingZeros() {
         var given = new byte[]{0,0,1,2,3};
         var expected = new byte[]{1,2,3};
-        var actual = JavaSEServerKeys.stripLeadingZeros(given);
+        var actual = JCEServerKeys.stripLeadingZeros(given);
         assertThat(actual).isEqualTo(expected);
     }
 }

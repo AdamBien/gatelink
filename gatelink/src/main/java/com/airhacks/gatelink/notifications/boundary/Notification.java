@@ -41,6 +41,14 @@ public class Notification {
         }
     }
 
+    public java.security.interfaces.ECPublicKey getJCEPublicKey() {
+        try {
+            return this.subscription.getP256dhAsPublicKeyWithJCE();
+        } catch (NoSuchProviderException | NoSuchAlgorithmException | InvalidKeySpecException ex) {
+            throw new IllegalStateException("Key cannot be loaded", ex);
+        }
+    }
+
     public byte[] getAuthAsBytes() {
         return convertAuth(this.subscription.getAuth());
 

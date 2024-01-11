@@ -22,14 +22,13 @@ import javax.crypto.spec.SecretKeySpec;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.generators.HKDFBytesGenerator;
 import org.bouncycastle.crypto.params.HKDFParameters;
-import org.bouncycastle.jce.interfaces.ECPrivateKey;
-import org.bouncycastle.jce.interfaces.ECPublicKey;
 import org.eclipse.microprofile.metrics.annotation.Metered;
-
 import com.airhacks.gatelink.Control;
 import com.airhacks.gatelink.bytes.control.Bytes;
-import com.airhacks.gatelink.keymanagement.entity.BCServerKeys;
+import com.airhacks.gatelink.keymanagement.entity.JCEServerKeys;
 import com.airhacks.gatelink.notifications.boundary.Notification;
+import java.security.interfaces.ECPrivateKey;
+import java.security.interfaces.ECPublicKey;
 
 /**
  *
@@ -64,12 +63,12 @@ public class JCEEncryptor {
      * @throws BadPaddingException
      */
     @Metered
-    public byte[] encrypt(Notification notification, BCServerKeys keys, ECPublicKey ephemeralPublicKey,
+    public byte[] encrypt(Notification notification, JCEServerKeys keys, ECPublicKey ephemeralPublicKey,
             ECPrivateKey ephemeralPrivateKey, byte[] salt)
             throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchProviderException,
             InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 
-        ECPublicKey browserKey = notification.getPublicKey();
+        var browserKey = notification.getJCEPublicKey();
         byte[] secret = getKeyAgreement(browserKey, ephemeralPrivateKey);
         byte[] context = Bytes.add(Bytes.getBytes("P-256"), new byte[1], getPublicKeyAsBytes(browserKey), getPublicKeyAsBytes(ephemeralPublicKey));
 
@@ -136,7 +135,7 @@ public class JCEEncryptor {
 
     // todo javadoc
     static byte[] getPublicKeyAsBytes(ECPublicKey publicKey) {
-        byte[] bytes = publicKey.getQ().getEncoded(false);
+        byte[] bytes = JCEServerKeys.decompressedRepresentation(publicKey);
         var length = Bytes.unsignedIntToBytes(bytes.length);
         return Bytes.add(length, bytes);
     }

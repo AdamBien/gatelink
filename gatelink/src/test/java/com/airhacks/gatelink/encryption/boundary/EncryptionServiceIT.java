@@ -4,6 +4,8 @@ package com.airhacks.gatelink.encryption.boundary;
 
 import com.airhacks.gatelink.encryption.boundary.EncryptionService;
 import com.airhacks.gatelink.encryption.control.BCEncryptor;
+import com.airhacks.gatelink.encryption.control.JCEEncryptor;
+
 import org.junit.jupiter.api.BeforeEach;
 
 /**
