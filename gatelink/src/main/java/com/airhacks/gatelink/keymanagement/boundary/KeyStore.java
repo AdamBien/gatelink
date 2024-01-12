@@ -2,7 +2,7 @@
 package com.airhacks.gatelink.keymanagement.boundary;
 
 import com.airhacks.gatelink.keymanagement.control.JCEKeyGenerator;
-import com.airhacks.gatelink.keymanagement.entity.JCEServerKeys;
+import com.airhacks.gatelink.keymanagement.entity.ECKeys;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -14,7 +14,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class KeyStore {
 
-    private JCEServerKeys keys;
+    private ECKeys keys;
 
 
     @PostConstruct
@@ -23,7 +23,7 @@ public class KeyStore {
         this.keys.logKeys();
     }
 
-    public JCEServerKeys getKeys() {
+    public ECKeys getKeys() {
         return this.keys;
     }
 

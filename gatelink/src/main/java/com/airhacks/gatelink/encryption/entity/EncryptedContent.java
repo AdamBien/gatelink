@@ -2,8 +2,11 @@
 package com.airhacks.gatelink.encryption.entity;
 
 import java.security.PublicKey;
+import java.security.interfaces.ECPublicKey;
 import java.util.Base64;
-import org.bouncycastle.jce.interfaces.ECPublicKey;
+
+import com.airhacks.gatelink.keymanagement.entity.ECKeys;
+
 
 /**
  *
@@ -22,7 +25,7 @@ public record EncryptedContent(byte[] encryptedContent,byte[] salt,ECPublicKey e
     }
 
     public String getEncodedEphemeralPublicKey() {
-        byte[] encoded = this.ephemeralPublicKey.getQ().getEncoded(false);
+        byte[] encoded = ECKeys.decompressedRepresentation(this.ephemeralPublicKey);
         return Base64.getUrlEncoder().encodeToString(encoded);
     }
 

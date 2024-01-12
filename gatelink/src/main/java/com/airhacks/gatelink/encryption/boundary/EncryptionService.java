@@ -16,9 +16,9 @@ import javax.crypto.NoSuchPaddingException;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 
 import com.airhacks.gatelink.encryption.control.JCEEncryptor;
-import com.airhacks.gatelink.encryption.entity.JCEEncryptedContent;
+import com.airhacks.gatelink.encryption.entity.EncryptedContent;
 import com.airhacks.gatelink.keymanagement.control.JCEKeyGenerator;
-import com.airhacks.gatelink.keymanagement.entity.JCEServerKeys;
+import com.airhacks.gatelink.keymanagement.entity.ECKeys;
 import com.airhacks.gatelink.notifications.boundary.Notification;
 
 import jakarta.annotation.PostConstruct;
@@ -53,7 +53,7 @@ public class EncryptionService {
         return salt;
     }
 
-    public JCEEncryptedContent encrypt(Notification notification, JCEServerKeys keys)
+    public EncryptedContent encrypt(Notification notification, ECKeys keys)
             throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchProviderException,
             InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
         var ephemeralLocalKeys = JCEKeyGenerator.generateEphemeralKeys();
@@ -62,6 +62,6 @@ public class EncryptionService {
         var salt = this.getNextSalt();
         var encryptedContent = this.encryptor.encrypt(notification, keys, serverEphemeralPublic, ephemeralPrivateKey,
                 salt);
-        return new JCEEncryptedContent(encryptedContent, salt, serverEphemeralPublic);
+        return new EncryptedContent(encryptedContent, salt, serverEphemeralPublic);
     }
 }

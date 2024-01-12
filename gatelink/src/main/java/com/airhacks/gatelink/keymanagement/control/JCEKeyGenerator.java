@@ -9,11 +9,11 @@ import java.security.KeyPair;
 import java.security.spec.ECGenParameterSpec;
 
 import com.airhacks.gatelink.keymanagement.boundary.KeyGenerationException;
-import com.airhacks.gatelink.keymanagement.entity.JCEServerKeys;
+import com.airhacks.gatelink.keymanagement.entity.ECKeys;
 
 public interface JCEKeyGenerator {
 
-    public static JCEServerKeys generateVapidKeys() {
+    public static ECKeys generateVapidKeys() {
 
         try {
             var parameterSpec = new ECGenParameterSpec("secp256r1");
@@ -23,7 +23,7 @@ public interface JCEKeyGenerator {
             var serverKey = keyPairGenerator.generateKeyPair();
             var privateKey = (ECPrivateKey) serverKey.getPrivate();
             var publicKey = (ECPublicKey) serverKey.getPublic();
-            return new JCEServerKeys(privateKey, publicKey);
+            return new ECKeys(privateKey, publicKey);
 
         } catch ( NoSuchAlgorithmException | InvalidAlgorithmParameterException  ex) {
             throw new KeyGenerationException(ex.getMessage());

@@ -1,7 +1,6 @@
 
 package com.airhacks.gatelink.subscriptions.entity;
 
-import com.airhacks.gatelink.keymanagement.control.BCKeyLoader;
 import com.airhacks.gatelink.keymanagement.control.JCEKeyLoader;
 
 import java.security.NoSuchAlgorithmException;
@@ -38,10 +37,6 @@ public class Subscription {
     @JsonbTransient
     public String getAuth() {
         return keys.getString("auth");
-    }
-    @JsonbTransient
-    public ECPublicKey getP256dhAsPublicKey() throws NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException {
-        return BCKeyLoader.loadUrlEncodedPublicKey(this.getP256dh());
     }
 
     @JsonbTransient

@@ -14,7 +14,7 @@ import jakarta.json.JsonObject;
  *
  * @author airhacks.com
  */
-public record JCEServerKeys(ECPrivateKey privateKey,ECPublicKey publicKey) {
+public record ECKeys(ECPrivateKey privateKey,ECPublicKey publicKey) {
 
     public byte[] getPrivateKeyAsBytes() {
         return privateKey.getS().toByteArray();

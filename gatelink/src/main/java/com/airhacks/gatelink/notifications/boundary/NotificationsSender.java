@@ -1,9 +1,7 @@
 
 package com.airhacks.gatelink.notifications.boundary;
 
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -25,10 +23,8 @@ import org.jose4j.lang.JoseException;
 import com.airhacks.gatelink.Boundary;
 import com.airhacks.gatelink.encryption.boundary.EncryptionService;
 import com.airhacks.gatelink.encryption.entity.EncryptedContent;
-import com.airhacks.gatelink.encryption.entity.JCEEncryptedContent;
 import com.airhacks.gatelink.keymanagement.boundary.KeyStore;
-import com.airhacks.gatelink.keymanagement.entity.BCServerKeys;
-import com.airhacks.gatelink.keymanagement.entity.JCEServerKeys;
+import com.airhacks.gatelink.keymanagement.entity.ECKeys;
 import com.airhacks.gatelink.log.boundary.Tracer;
 import com.airhacks.gatelink.notifications.control.PushService;
 import com.airhacks.gatelink.subscriptions.control.SubscriptionsStore;
@@ -73,7 +69,7 @@ public class NotificationsSender {
     @Counted(absolute = true, name = "forwardedMessages")
     public void send(String message) {
         tracer.log("Sending " + message);
-        JCEServerKeys serverKeys = this.keyStore.getKeys();
+        ECKeys serverKeys = this.keyStore.getKeys();
 
         this.store.all()
                 .stream()
@@ -81,7 +77,7 @@ public class NotificationsSender {
                 .forEach(n -> this.send(n, serverKeys));
     }
 
-    public Response send(Notification notification, JCEServerKeys serverKeys) {
+    public Response send(Notification notification, ECKeys serverKeys) {
         Response response = null;
         try {
             var encryptedContent = this.encryptionService.encrypt(notification, serverKeys);
@@ -96,7 +92,7 @@ public class NotificationsSender {
         return response;
     }
 
-    public Response sendEncryptedMessage(JCEServerKeys serverKeys, String endpoint, JCEEncryptedContent encryptedContent)
+    public Response sendEncryptedMessage(ECKeys serverKeys, String endpoint, EncryptedContent encryptedContent)
             throws JoseException {
         tracer.log("Sending to endpoint " + endpoint);
         String audience = extractAud(endpoint);

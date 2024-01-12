@@ -2,25 +2,23 @@
  */
 package com.airhacks.gatelink.encryption.control;
 
-import com.airhacks.gatelink.encryption.control.BCEncryptor;
-import com.airhacks.gatelink.EncryptionTestEnvironment;
-import com.airhacks.gatelink.encryption.boundary.EncryptionService;
-import com.airhacks.gatelink.encryption.entity.EncryptedContent;
-import com.airhacks.gatelink.keymanagement.control.JCEKeyGenerator;
-import com.airhacks.gatelink.notifications.boundary.Notification;
-import com.airhacks.gatelink.notifications.boundary.NotificationsSender;
-import com.airhacks.gatelink.notifications.boundary.NotificationsSenderIT;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.interfaces.ECPrivateKey;
+import java.security.interfaces.ECPublicKey;
 import java.security.spec.InvalidKeySpecException;
-import jakarta.ws.rs.core.Response;
-import org.bouncycastle.jce.interfaces.ECPrivateKey;
-import org.bouncycastle.jce.interfaces.ECPublicKey;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import com.airhacks.gatelink.EncryptionTestEnvironment;
+import com.airhacks.gatelink.encryption.boundary.EncryptionService;
+import com.airhacks.gatelink.encryption.entity.EncryptedContent;
+import com.airhacks.gatelink.keymanagement.control.JCEKeyGenerator;
+import com.airhacks.gatelink.notifications.boundary.NotificationsSenderIT;
 
 /**
  *
@@ -28,7 +26,7 @@ import org.junit.jupiter.api.Test;
  */
 public class EncryptorIT extends EncryptionTestEnvironment {
 
-    private BCEncryptor cut;
+    private JCEEncryptor cut;
     private ECPublicKey ephemeralPublic;
     private ECPrivateKey ephemeralPrivate;
     private byte[] salt;
@@ -43,23 +41,21 @@ public class EncryptorIT extends EncryptionTestEnvironment {
         this.ephemeralPublic = (ECPublicKey) ephemeralKeys.getPublic();
         this.ephemeralPrivate = (ECPrivateKey) ephemeralKeys.getPrivate();
         this.salt = service.getNextSalt();
-        this.cut = new BCEncryptor();
+        this.cut = new JCEEncryptor();
     }
 
 
 
-    /**
     @Test
     public void encryptAndSend() throws Exception {
-        Notification notification = this.serverKeysWithSubscription.getNotification("hey duke");
+        var notification = this.serverKeysWithSubscription.getNotification("hey duke");
         byte encrypted[] = this.cut.encrypt(notification, this.serverKeysWithSubscription.getServerKeys(), ephemeralPublic, ephemeralPrivate, this.salt);
 
-        NotificationsSender notificationsSender = new NotificationsSenderIT().getCut();
-        EncryptedContent encryptedContent = new EncryptedContent(encrypted, salt, ephemeralPublic);
+        var notificationsSender = new NotificationsSenderIT().getCut();
+        var encryptedContent = new EncryptedContent(encrypted, salt, ephemeralPublic);
 
-        Response response = notificationsSender.sendEncryptedMessage(this.serverKeysWithSubscription.getServerKeys(), notification.getEndpoint(), encryptedContent);
+        var response = notificationsSender.sendEncryptedMessage(this.serverKeysWithSubscription.getServerKeys(), notification.getEndpoint(), encryptedContent);
         System.out.println("response = " + response.getStatus());
     }
 
-     */
 }

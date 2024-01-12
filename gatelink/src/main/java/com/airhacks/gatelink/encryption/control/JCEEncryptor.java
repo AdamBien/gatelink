@@ -24,7 +24,7 @@ import org.eclipse.microprofile.metrics.annotation.Metered;
 
 import com.airhacks.gatelink.Control;
 import com.airhacks.gatelink.bytes.control.Bytes;
-import com.airhacks.gatelink.keymanagement.entity.JCEServerKeys;
+import com.airhacks.gatelink.keymanagement.entity.ECKeys;
 import com.airhacks.gatelink.notifications.boundary.Notification;
 
 /**
@@ -46,7 +46,7 @@ public class JCEEncryptor {
      * Checkout: https://www.rfc-editor.org/rfc/rfc8291.html
      */
     @Metered
-    public byte[] encrypt(Notification notification, JCEServerKeys keys, ECPublicKey ephemeralPublicKey,
+    public byte[] encrypt(Notification notification, ECKeys keys, ECPublicKey ephemeralPublicKey,
             ECPrivateKey ephemeralPrivateKey, byte[] salt)
             throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchProviderException,
             InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
@@ -103,7 +103,7 @@ public class JCEEncryptor {
 
     // todo javadoc
     static byte[] getPublicKeyAsBytes(ECPublicKey publicKey) {
-        byte[] bytes = JCEServerKeys.decompressedRepresentation(publicKey);
+        byte[] bytes = ECKeys.decompressedRepresentation(publicKey);
         var length = Bytes.unsignedIntToBytes(bytes.length);
         return Bytes.add(length, bytes);
     }

@@ -3,10 +3,9 @@ package com.airhacks.gatelink.notifications.boundary;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.interfaces.ECPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
-
-import org.bouncycastle.jce.interfaces.ECPublicKey;
 
 import com.airhacks.gatelink.bytes.control.Bytes;
 import com.airhacks.gatelink.subscriptions.entity.Subscription;
@@ -33,15 +32,8 @@ public class Notification {
         return message;
     }
 
-    public ECPublicKey getPublicKey() {
-        try {
-            return this.subscription.getP256dhAsPublicKey();
-        } catch (NoSuchProviderException | NoSuchAlgorithmException | InvalidKeySpecException ex) {
-            throw new IllegalStateException("Key cannot be loaded", ex);
-        }
-    }
 
-    public java.security.interfaces.ECPublicKey getJCEPublicKey() {
+    public ECPublicKey getJCEPublicKey() {
         try {
             return this.subscription.getP256dhAsPublicKeyWithJCE();
         } catch (NoSuchProviderException | NoSuchAlgorithmException | InvalidKeySpecException ex) {

@@ -2,14 +2,12 @@
  */
 package com.airhacks.gatelink.subscriptions.entity;
 
-import java.security.Security;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.Test;
+
 import jakarta.json.Json;
 import jakarta.json.bind.JsonbBuilder;
-import org.bouncycastle.jce.interfaces.ECPublicKey;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -17,10 +15,6 @@ import org.junit.jupiter.api.Test;
  */
 public class SubscriptionTest {
 
-    @BeforeEach
-    public void init() {
-        Security.addProvider(new BouncyCastleProvider());
-    }
 
 
     @Test
@@ -28,7 +22,7 @@ public class SubscriptionTest {
         String mozillaPublicKey = "BBI3DLpP6uoCr53TVm58ztnRDJ6Wszr0oPIemSzJYLsLMYRhCeFU1EBE5mrq_kWSiNfj2Indn4GvgEAIPEXVLlg";
         Subscription subscription = new Subscription();
         subscription.keys = Json.createObjectBuilder().add(Subscription.PUBLIC_KEY, mozillaPublicKey).build();
-        ECPublicKey p256dhAsPublicKey = subscription.getP256dhAsPublicKey();
+        var p256dhAsPublicKey = subscription.getP256dhAsPublicKeyWithJCE();
         assertNotNull(p256dhAsPublicKey);
     }
 
