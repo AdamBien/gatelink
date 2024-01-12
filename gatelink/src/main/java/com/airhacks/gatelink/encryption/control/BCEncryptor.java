@@ -89,14 +89,16 @@ public class BCEncryptor {
         byte[] paddedCipherText = Bytes.add(twoBytes, encryptedMessage);
         return paddedCipherText;
     }
-
-    byte[] getKeyAgreement(ECPublicKey browserKey, ECPrivateKey ephemeralPrivateKey)
+    
+    static byte[] getKeyAgreement(ECPublicKey browserKey, ECPrivateKey ephemeralPrivateKey)
             throws NoSuchAlgorithmException, InvalidKeyException {
-        KeyAgreement keyAgreement = KeyAgreement.getInstance("ECDH");
+        var keyAgreement = KeyAgreement.getInstance("ECDH");
         keyAgreement.init(ephemeralPrivateKey);
         keyAgreement.doPhase(browserKey, true);
         return keyAgreement.generateSecret();
     }
+    
+
 
     static byte[] buildInfo(String type, byte[] context) {
         ByteBuffer buffer = ByteBuffer.allocate(19 + type.length() + context.length);

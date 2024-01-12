@@ -7,6 +7,8 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.interfaces.ECPrivateKey;
+import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECGenParameterSpec;
 import java.security.spec.ECParameterSpec;
 import java.security.spec.InvalidParameterSpecException;
@@ -14,21 +16,16 @@ import java.security.spec.InvalidParameterSpecException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyAgreement;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.bouncycastle.crypto.digests.SHA256Digest;
-import org.bouncycastle.crypto.generators.HKDFBytesGenerator;
-import org.bouncycastle.crypto.params.HKDFParameters;
 import org.eclipse.microprofile.metrics.annotation.Metered;
+
 import com.airhacks.gatelink.Control;
 import com.airhacks.gatelink.bytes.control.Bytes;
 import com.airhacks.gatelink.keymanagement.entity.JCEServerKeys;
 import com.airhacks.gatelink.notifications.boundary.Notification;
-import java.security.interfaces.ECPrivateKey;
-import java.security.interfaces.ECPublicKey;
 
 /**
  *
@@ -47,20 +44,6 @@ public class JCEEncryptor {
      * auth_secret = <from user agent>
      * salt = random(16)
      * Checkout: https://www.rfc-editor.org/rfc/rfc8291.html
-     * 
-     * @param notification
-     * @param keys
-     * @param ephemeralPublicKey
-     * @param ephemeralPrivateKey
-     * @param salt
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidAlgorithmParameterException
-     * @throws NoSuchProviderException
-     * @throws InvalidKeyException
-     * @throws NoSuchPaddingException
-     * @throws IllegalBlockSizeException
-     * @throws BadPaddingException
      */
     @Metered
     public byte[] encrypt(Notification notification, JCEServerKeys keys, ECPublicKey ephemeralPublicKey,
@@ -69,17 +52,17 @@ public class JCEEncryptor {
             InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 
         var browserKey = notification.getJCEPublicKey();
-        byte[] secret = getKeyAgreement(browserKey, ephemeralPrivateKey);
+        byte[] secret = KeyExchange.getKeyAgreement(browserKey, ephemeralPrivateKey);
         byte[] context = Bytes.add(Bytes.getBytes("P-256"), new byte[1], getPublicKeyAsBytes(browserKey), getPublicKeyAsBytes(ephemeralPublicKey));
 
-        secret = hmacKeyDerivation(secret, notification.getAuthAsBytes(), buildInfo("auth", new byte[0]),
+        secret = HMacKeyDerivation.derive(secret, notification.getAuthAsBytes(), buildInfo("auth", new byte[0]),
                 SHA_256_LENGTH);
 
         byte[] keyInfo = buildInfo("aesgcm", context);
         byte[] nonceInfo = buildInfo("nonce", context);
 
-        byte[] key = hmacKeyDerivation(secret, salt, keyInfo, 16);
-        byte[] nonce = hmacKeyDerivation(secret, salt, nonceInfo, 12);
+        byte[] key = HMacKeyDerivation.derive(secret, salt, keyInfo, 16);
+        byte[] nonce = HMacKeyDerivation.derive(secret, salt, nonceInfo, 12);
 
         Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding", "BC");
         GCMParameterSpec params = new GCMParameterSpec(TAG_SIZE * 8, nonce);
@@ -91,13 +74,6 @@ public class JCEEncryptor {
         return paddedCipherText;
     }
 
-    byte[] getKeyAgreement(ECPublicKey browserKey, ECPrivateKey ephemeralPrivateKey)
-            throws NoSuchAlgorithmException, InvalidKeyException {
-        KeyAgreement keyAgreement = KeyAgreement.getInstance("ECDH");
-        keyAgreement.init(ephemeralPrivateKey);
-        keyAgreement.doPhase(browserKey, true);
-        return keyAgreement.generateSecret();
-    }
 
     static byte[] buildInfo(String type, byte[] context) {
         ByteBuffer buffer = ByteBuffer.allocate(19 + type.length() + context.length);
@@ -110,14 +86,6 @@ public class JCEEncryptor {
 
 
 
-    static byte[] hmacKeyDerivation(byte[] ikm, byte[] salt, byte[] info, int length) {
-
-        HKDFBytesGenerator hkdf = new HKDFBytesGenerator(new SHA256Digest());
-        hkdf.init(new HKDFParameters(ikm, salt, info));
-        byte[] okm = new byte[length];
-        hkdf.generateBytes(okm, 0, length);
-        return okm;
-    }
 
     public static ECGenParameterSpec getCurveGenParameterSpec() {
         return new ECGenParameterSpec("secp256r1");
