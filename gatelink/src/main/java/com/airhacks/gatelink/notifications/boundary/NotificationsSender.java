@@ -2,6 +2,7 @@
 package com.airhacks.gatelink.notifications.boundary;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -120,15 +121,12 @@ public class NotificationsSender {
     }
 
     static String extractAud(String endpoint) {
-        URL uri;
-        try {
-            uri = new URL(endpoint);
-        } catch (MalformedURLException ex) {
-            return endpoint;
-        }
-        String host = uri.getHost();
-        String protocol = uri.getProtocol();
-        return String.format("%s://%s", protocol, host);
+            var uri = URI.create(endpoint);
+            var host = uri.getHost();
+            var protocol = uri.getScheme();
+            if(uri == null || host == null)
+                return endpoint;
+            return String.format("%s://%s", protocol, host);       
     }
 
 }
