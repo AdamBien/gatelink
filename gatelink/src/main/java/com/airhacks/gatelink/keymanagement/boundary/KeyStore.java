@@ -1,14 +1,11 @@
 
 package com.airhacks.gatelink.keymanagement.boundary;
 
-import com.airhacks.gatelink.keymanagement.control.BCKeyGenerator;
 import com.airhacks.gatelink.keymanagement.control.JCEKeyGenerator;
-import com.airhacks.gatelink.keymanagement.entity.BCServerKeys;
 import com.airhacks.gatelink.keymanagement.entity.JCEServerKeys;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 /**
  *

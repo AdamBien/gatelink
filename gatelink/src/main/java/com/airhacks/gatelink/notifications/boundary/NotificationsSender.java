@@ -22,7 +22,7 @@ import org.jose4j.jwt.JwtClaims;
 import org.jose4j.lang.JoseException;
 
 import com.airhacks.gatelink.Boundary;
-import com.airhacks.gatelink.encryption.boundary.JCEEncryptionService;
+import com.airhacks.gatelink.encryption.boundary.EncryptionService;
 import com.airhacks.gatelink.encryption.entity.EncryptedContent;
 import com.airhacks.gatelink.encryption.entity.JCEEncryptedContent;
 import com.airhacks.gatelink.keymanagement.boundary.KeyStore;
@@ -53,7 +53,7 @@ public class NotificationsSender {
     KeyStore keyStore;
 
     @Inject
-    JCEEncryptionService encryptionService;
+    EncryptionService encryptionService;
 
     @Inject
     Tracer tracer;

@@ -13,16 +13,16 @@ import com.airhacks.gatelink.encryption.control.JCEEncryptor;
  */
 public class EncryptionServiceIT {
 
-    private JCEEncryptionService cut;
+    private EncryptionService cut;
 
     @BeforeEach
     public void init() {
-        this.cut = new JCEEncryptionService();
+        this.cut = new EncryptionService();
         this.cut.init();
         this.cut.encryptor = new JCEEncryptor();
     }
 
-    public JCEEncryptionService getCut() {
+    public EncryptionService getCut() {
         this.init();
         return cut;
     }

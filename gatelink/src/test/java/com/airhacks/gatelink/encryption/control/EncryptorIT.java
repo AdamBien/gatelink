@@ -4,7 +4,7 @@ package com.airhacks.gatelink.encryption.control;
 
 import com.airhacks.gatelink.encryption.control.BCEncryptor;
 import com.airhacks.gatelink.EncryptionTestEnvironment;
-import com.airhacks.gatelink.encryption.boundary.JCEEncryptionService;
+import com.airhacks.gatelink.encryption.boundary.EncryptionService;
 import com.airhacks.gatelink.encryption.entity.EncryptedContent;
 import com.airhacks.gatelink.keymanagement.control.JCEKeyGenerator;
 import com.airhacks.gatelink.notifications.boundary.Notification;
@@ -37,7 +37,7 @@ public class EncryptorIT extends EncryptionTestEnvironment {
     @BeforeEach
     public void initialize() throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException, IOException, InvalidAlgorithmParameterException {
         super.init("chrome");
-        JCEEncryptionService service = new JCEEncryptionService();
+        EncryptionService service = new EncryptionService();
         service.init();
         this.ephemeralKeys = JCEKeyGenerator.generateEphemeralKeys();
         this.ephemeralPublic = (ECPublicKey) ephemeralKeys.getPublic();
