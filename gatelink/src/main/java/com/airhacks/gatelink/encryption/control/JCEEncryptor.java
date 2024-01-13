@@ -36,7 +36,7 @@ public class JCEEncryptor {
 
     public static final int SHA_256_LENGTH = 32;
 
-    private final int TAG_SIZE = 16;
+    private static final int TAG_SIZE = 16;
 
     /**
      * 
@@ -56,10 +56,10 @@ public class JCEEncryptor {
         // HKDF-Extract(salt=auth_secret, IKM=ecdh_secret)
         byte[] secret = KeyExchange.getKeyAgreement(browserKey, ephemeralPrivateKey);
         secret = HMacKeyDerivation.derive(secret, notification.getAuthAsBytes(), buildInfo("auth", new byte[0]),
-        SHA_256_LENGTH);
+                SHA_256_LENGTH);
 
-        byte[] context = Bytes.concat(Bytes.getBytes("P-256"), new byte[1], getPublicKeyAsBytes(browserKey), getPublicKeyAsBytes(ephemeralPublicKey));
-
+        byte[] context = Bytes.concat(Bytes.getBytes("P-256"), new byte[1], getPublicKeyAsBytes(browserKey),
+                getPublicKeyAsBytes(ephemeralPublicKey));
 
         byte[] keyInfo = buildInfo("aesgcm", context);
         byte[] nonceInfo = buildInfo("nonce", context);
@@ -67,16 +67,22 @@ public class JCEEncryptor {
         byte[] key = HMacKeyDerivation.derive(secret, salt, keyInfo, 16);
         byte[] nonce = HMacKeyDerivation.derive(secret, salt, nonceInfo, 12);
 
-        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding", "BC");
-        GCMParameterSpec params = new GCMParameterSpec(TAG_SIZE * 8, nonce);
-        cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, "AES"), params);
+        var content = notification.getMessageAsBytes();
+        return encryptWithAES(key, content, nonce);
 
-        byte[] twoBytes = cipher.update(new byte[2]);
-        byte[] encryptedMessage = cipher.doFinal(notification.getMessageAsBytes());
-        byte[] paddedCipherText = Bytes.concat(twoBytes, encryptedMessage);
-        return paddedCipherText;
     }
 
+    static byte[] encryptWithAES(byte[] key, byte[] content, byte[] nonce)
+            throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException,
+            InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+        var cipher = Cipher.getInstance("AES/GCM/NoPadding", "BC");
+        var params = new GCMParameterSpec(TAG_SIZE * 8, nonce);
+        cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, "AES"), params);
+
+        var twoBytes = cipher.update(new byte[2]);
+        var encryptedMessage = cipher.doFinal();
+        return Bytes.concat(twoBytes, encryptedMessage);
+    }
 
     static byte[] buildInfo(String type, byte[] context) {
         ByteBuffer buffer = ByteBuffer.allocate(19 + type.length() + context.length);
@@ -86,9 +92,6 @@ public class JCEEncryptor {
         buffer.put(context, 0, context.length);
         return buffer.array();
     }
-
-
-
 
     public static ECGenParameterSpec getCurveGenParameterSpec() {
         return new ECGenParameterSpec("secp256r1");
@@ -100,7 +103,7 @@ public class JCEEncryptor {
             algorithmParameters.init(getCurveGenParameterSpec());
             return algorithmParameters.getParameterSpec(ECParameterSpec.class);
         } catch (NoSuchAlgorithmException | InvalidParameterSpecException e) {
-                throw new IllegalStateException("Cannot create ECParameterSpec: " + e);
+            throw new IllegalStateException("Cannot create ECParameterSpec: " + e);
         }
     }
 
