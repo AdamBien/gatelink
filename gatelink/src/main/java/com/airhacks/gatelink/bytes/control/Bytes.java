@@ -8,7 +8,7 @@ import java.math.BigInteger;
 
 public interface Bytes {
 
-    static byte[] add(byte[]... arrays) {
+    static byte[] concat(byte[]... arrays) {
         try (var stream = new ByteArrayOutputStream()) {
             for (var array : arrays) {
                 if (array == null) {

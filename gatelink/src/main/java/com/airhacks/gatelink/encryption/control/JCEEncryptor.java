@@ -52,11 +52,14 @@ public class JCEEncryptor {
             InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 
         var browserKey = notification.getJCEPublicKey();
+        // Use HKDF to combine the ECDH and authentication secrets
+        // HKDF-Extract(salt=auth_secret, IKM=ecdh_secret)
         byte[] secret = KeyExchange.getKeyAgreement(browserKey, ephemeralPrivateKey);
-        byte[] context = Bytes.add(Bytes.getBytes("P-256"), new byte[1], getPublicKeyAsBytes(browserKey), getPublicKeyAsBytes(ephemeralPublicKey));
-
         secret = HMacKeyDerivation.derive(secret, notification.getAuthAsBytes(), buildInfo("auth", new byte[0]),
-                SHA_256_LENGTH);
+        SHA_256_LENGTH);
+
+        byte[] context = Bytes.concat(Bytes.getBytes("P-256"), new byte[1], getPublicKeyAsBytes(browserKey), getPublicKeyAsBytes(ephemeralPublicKey));
+
 
         byte[] keyInfo = buildInfo("aesgcm", context);
         byte[] nonceInfo = buildInfo("nonce", context);
@@ -70,7 +73,7 @@ public class JCEEncryptor {
 
         byte[] twoBytes = cipher.update(new byte[2]);
         byte[] encryptedMessage = cipher.doFinal(notification.getMessageAsBytes());
-        byte[] paddedCipherText = Bytes.add(twoBytes, encryptedMessage);
+        byte[] paddedCipherText = Bytes.concat(twoBytes, encryptedMessage);
         return paddedCipherText;
     }
 
@@ -105,7 +108,7 @@ public class JCEEncryptor {
     static byte[] getPublicKeyAsBytes(ECPublicKey publicKey) {
         byte[] bytes = ECKeys.decompressedRepresentation(publicKey);
         var length = Bytes.unsignedIntToBytes(bytes.length);
-        return Bytes.add(length, bytes);
+        return Bytes.concat(length, bytes);
     }
 
 }
