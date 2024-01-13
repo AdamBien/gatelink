@@ -37,7 +37,7 @@ public class EncryptorIT extends EncryptionTestEnvironment {
         super.init("chrome");
         EncryptionService service = new EncryptionService();
         service.init();
-        this.ephemeralKeys = ECKeyGenerator.generateEphemeralKeys();
+        this.ephemeralKeys = ECKeyGenerator.generate();
         this.ephemeralPublic = (ECPublicKey) ephemeralKeys.getPublic();
         this.ephemeralPrivate = (ECPrivateKey) ephemeralKeys.getPrivate();
         this.salt = service.getNextSalt();

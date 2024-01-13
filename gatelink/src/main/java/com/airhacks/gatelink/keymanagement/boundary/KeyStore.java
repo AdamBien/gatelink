@@ -19,7 +19,7 @@ public class KeyStore {
 
     @PostConstruct
     public void initializeProvider() {
-        this.keys = ECKeyGenerator.generateVapidKeys();
+        this.keys = ECKeyGenerator.generate();
         this.keys.logKeys();
     }
 

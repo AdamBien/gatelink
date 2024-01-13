@@ -56,9 +56,9 @@ public class EncryptionService {
     public EncryptedContent encrypt(Notification notification, ECKeys keys)
             throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchProviderException,
             InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
-        var ephemeralLocalKeys = ECKeyGenerator.generateEphemeralKeys();
-        var serverEphemeralPublic = (ECPublicKey) ephemeralLocalKeys.getPublic();
-        var ephemeralPrivateKey = (ECPrivateKey) ephemeralLocalKeys.getPrivate();
+        var ephemeralLocalKeys = ECKeyGenerator.generate();
+        var serverEphemeralPublic = (ECPublicKey) ephemeralLocalKeys.getPublicKey();
+        var ephemeralPrivateKey = (ECPrivateKey) ephemeralLocalKeys.getPrivateKey();
         var salt = this.getNextSalt();
         var encryptedContent = this.encryptor.encrypt(notification, keys, serverEphemeralPublic, ephemeralPrivateKey,
                 salt);
