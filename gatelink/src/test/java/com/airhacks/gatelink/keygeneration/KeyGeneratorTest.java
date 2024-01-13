@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
-import com.airhacks.gatelink.keymanagement.control.JCEKeyGenerator;
+import com.airhacks.gatelink.keymanagement.control.ECKeyGenerator;
 
 /**
  *
@@ -17,7 +17,7 @@ public class KeyGeneratorTest {
 
     @Test
     public void createKeys() throws Exception {
-        var vapidKeys = JCEKeyGenerator.generateVapidKeys();
+        var vapidKeys = ECKeyGenerator.generateVapidKeys();
         byte[] privateKey = vapidKeys.getPrivateKeyAsBytes();
         assertNotNull(privateKey);
 

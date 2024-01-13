@@ -22,7 +22,7 @@ public class SubscriptionTest {
         String mozillaPublicKey = "BBI3DLpP6uoCr53TVm58ztnRDJ6Wszr0oPIemSzJYLsLMYRhCeFU1EBE5mrq_kWSiNfj2Indn4GvgEAIPEXVLlg";
         Subscription subscription = new Subscription();
         subscription.keys = Json.createObjectBuilder().add(Subscription.PUBLIC_KEY, mozillaPublicKey).build();
-        var p256dhAsPublicKey = subscription.getP256dhAsPublicKeyWithJCE();
+        var p256dhAsPublicKey = subscription.getP256dhAsPublicKey();
         assertNotNull(p256dhAsPublicKey);
     }
 

@@ -5,10 +5,10 @@ import com.airhacks.gatelink.keymanagement.control.JCEKeyLoader;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.interfaces.ECPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import jakarta.json.JsonObject;
 import jakarta.json.bind.annotation.JsonbTransient;
-import org.bouncycastle.jce.interfaces.ECPublicKey;
 
 /**
  * "... For each new subscription that the user agent generates for an
@@ -40,7 +40,7 @@ public class Subscription {
     }
 
     @JsonbTransient
-    public java.security.interfaces.ECPublicKey getP256dhAsPublicKeyWithJCE() throws NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException {
+    public ECPublicKey getP256dhAsPublicKey() throws NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException {
         return JCEKeyLoader.loadUrlEncodedPublicKey(this.getP256dh());
     }
 

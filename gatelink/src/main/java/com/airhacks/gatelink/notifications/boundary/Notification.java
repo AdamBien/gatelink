@@ -35,7 +35,7 @@ public class Notification {
 
     public ECPublicKey getJCEPublicKey() {
         try {
-            return this.subscription.getP256dhAsPublicKeyWithJCE();
+            return this.subscription.getP256dhAsPublicKey();
         } catch (NoSuchProviderException | NoSuchAlgorithmException | InvalidKeySpecException ex) {
             throw new IllegalStateException("Key cannot be loaded", ex);
         }

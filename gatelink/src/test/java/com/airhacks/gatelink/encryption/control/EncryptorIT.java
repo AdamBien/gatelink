@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 import com.airhacks.gatelink.EncryptionTestEnvironment;
 import com.airhacks.gatelink.encryption.boundary.EncryptionService;
 import com.airhacks.gatelink.encryption.entity.EncryptedContent;
-import com.airhacks.gatelink.keymanagement.control.JCEKeyGenerator;
+import com.airhacks.gatelink.keymanagement.control.ECKeyGenerator;
 import com.airhacks.gatelink.notifications.boundary.NotificationsSenderIT;
 
 /**
@@ -37,7 +37,7 @@ public class EncryptorIT extends EncryptionTestEnvironment {
         super.init("chrome");
         EncryptionService service = new EncryptionService();
         service.init();
-        this.ephemeralKeys = JCEKeyGenerator.generateEphemeralKeys();
+        this.ephemeralKeys = ECKeyGenerator.generateEphemeralKeys();
         this.ephemeralPublic = (ECPublicKey) ephemeralKeys.getPublic();
         this.ephemeralPrivate = (ECPrivateKey) ephemeralKeys.getPrivate();
         this.salt = service.getNextSalt();

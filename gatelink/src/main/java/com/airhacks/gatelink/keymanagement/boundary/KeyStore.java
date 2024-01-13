@@ -1,7 +1,7 @@
 
 package com.airhacks.gatelink.keymanagement.boundary;
 
-import com.airhacks.gatelink.keymanagement.control.JCEKeyGenerator;
+import com.airhacks.gatelink.keymanagement.control.ECKeyGenerator;
 import com.airhacks.gatelink.keymanagement.entity.ECKeys;
 
 import jakarta.annotation.PostConstruct;
@@ -19,7 +19,7 @@ public class KeyStore {
 
     @PostConstruct
     public void initializeProvider() {
-        this.keys = JCEKeyGenerator.generateVapidKeys();
+        this.keys = ECKeyGenerator.generateVapidKeys();
         this.keys.logKeys();
     }
 

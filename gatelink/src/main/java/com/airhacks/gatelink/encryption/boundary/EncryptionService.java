@@ -17,7 +17,7 @@ import org.eclipse.microprofile.metrics.annotation.Metered;
 
 import com.airhacks.gatelink.encryption.control.JCEEncryptor;
 import com.airhacks.gatelink.encryption.entity.EncryptedContent;
-import com.airhacks.gatelink.keymanagement.control.JCEKeyGenerator;
+import com.airhacks.gatelink.keymanagement.control.ECKeyGenerator;
 import com.airhacks.gatelink.keymanagement.entity.ECKeys;
 import com.airhacks.gatelink.notifications.boundary.Notification;
 
@@ -56,7 +56,7 @@ public class EncryptionService {
     public EncryptedContent encrypt(Notification notification, ECKeys keys)
             throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchProviderException,
             InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
-        var ephemeralLocalKeys = JCEKeyGenerator.generateEphemeralKeys();
+        var ephemeralLocalKeys = ECKeyGenerator.generateEphemeralKeys();
         var serverEphemeralPublic = (ECPublicKey) ephemeralLocalKeys.getPublic();
         var ephemeralPrivateKey = (ECPrivateKey) ephemeralLocalKeys.getPrivate();
         var salt = this.getNextSalt();
