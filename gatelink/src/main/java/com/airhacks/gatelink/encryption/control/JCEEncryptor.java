@@ -80,7 +80,7 @@ public class JCEEncryptor {
         cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, "AES"), params);
 
         var twoBytes = cipher.update(new byte[2]);
-        var encryptedMessage = cipher.doFinal();
+        var encryptedMessage = cipher.doFinal(content);
         return Bytes.concat(twoBytes, encryptedMessage);
     }
 
