@@ -11,6 +11,7 @@ import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.spec.InvalidKeySpecException;
 
+import org.bouncycastle.jce.interfaces.ECKey;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,6 +19,7 @@ import com.airhacks.gatelink.EncryptionTestEnvironment;
 import com.airhacks.gatelink.encryption.boundary.EncryptionService;
 import com.airhacks.gatelink.encryption.entity.EncryptedContent;
 import com.airhacks.gatelink.keymanagement.control.ECKeyGenerator;
+import com.airhacks.gatelink.keymanagement.entity.ECKeys;
 import com.airhacks.gatelink.notifications.boundary.NotificationsSenderIT;
 
 /**
@@ -30,17 +32,17 @@ public class EncryptorIT extends EncryptionTestEnvironment {
     private ECPublicKey ephemeralPublic;
     private ECPrivateKey ephemeralPrivate;
     private byte[] salt;
-    private KeyPair ephemeralKeys;
+    private ECKeys ephemeralKeys;
 
     @BeforeEach
     public void initialize() throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException, IOException, InvalidAlgorithmParameterException {
         super.init("chrome");
-        EncryptionService service = new EncryptionService();
-        service.init();
+        var encryptionService = new EncryptionService();
+        encryptionService.init();
         this.ephemeralKeys = ECKeyGenerator.generate();
-        this.ephemeralPublic = (ECPublicKey) ephemeralKeys.getPublic();
-        this.ephemeralPrivate = (ECPrivateKey) ephemeralKeys.getPrivate();
-        this.salt = service.getNextSalt();
+        this.ephemeralPublic = (ECPublicKey) ephemeralKeys.getPublicKey();
+        this.ephemeralPrivate = (ECPrivateKey) ephemeralKeys.getPrivateKey();
+        this.salt = encryptionService.getNextSalt();
         this.cut = new JCEEncryptor();
     }
 

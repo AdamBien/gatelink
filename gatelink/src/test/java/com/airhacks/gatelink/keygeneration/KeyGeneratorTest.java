@@ -17,7 +17,7 @@ public class KeyGeneratorTest {
 
     @Test
     public void createKeys() throws Exception {
-        var vapidKeys = ECKeyGenerator.generateVapidKeys();
+        var vapidKeys = ECKeyGenerator.generate();
         byte[] privateKey = vapidKeys.getPrivateKeyAsBytes();
         assertNotNull(privateKey);
 
