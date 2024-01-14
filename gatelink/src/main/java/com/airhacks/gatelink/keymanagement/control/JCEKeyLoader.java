@@ -39,10 +39,8 @@ public interface JCEKeyLoader {
         if(indicator != 4){
             throw new IllegalArgumentException("Parameter does not represent a public key");
         }
-        System.out.println(" length " + keyContent.length);
-        System.out.println(" first byte " + keyContent[0]);
         var parameterSpec = JCEEncryptor.getParameterSpec();
-        KeyFactory kf = KeyFactory.getInstance("EC");
+        var kf = KeyFactory.getInstance("EC");
         var x = Bytes.fromUnsignedByteArray(keyContent, 1, expectedLength);
         var y = Bytes.fromUnsignedByteArray(keyContent, 1 + expectedLength, expectedLength);
         var w = new ECPoint(x, y);
@@ -50,11 +48,11 @@ public interface JCEKeyLoader {
     }
 
     public static ECPrivateKey loadURLEncodedPrivateKey(String encodedPrivateKey) throws NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException {
-        byte[] decodedPrivateKey = Base64.getUrlDecoder().decode(encodedPrivateKey);
-        BigInteger s = new BigInteger(1, decodedPrivateKey);
+        var decodedPrivateKey = Base64.getUrlDecoder().decode(encodedPrivateKey);
+        var s = new BigInteger(1, decodedPrivateKey);
         var parameterSpec = JCEEncryptor.getParameterSpec();
         var privateKeySpec = new ECPrivateKeySpec(s, parameterSpec);
-        KeyFactory keyFactory = getKeyFactory();
+        var keyFactory = getKeyFactory();
         return (ECPrivateKey) keyFactory.generatePrivate(privateKeySpec);
     }
 

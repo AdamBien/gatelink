@@ -58,14 +58,14 @@ public class JCEEncryptor {
         secret = HMacKeyDerivation.derive(secret, notification.getAuthAsBytes(), buildInfo("auth", new byte[0]),
                 SHA_256_LENGTH);
 
-        byte[] context = Bytes.concat(Bytes.getBytes("P-256"), new byte[1], getPublicKeyAsBytes(browserKey),
+        var context = Bytes.concat(Bytes.getBytes("P-256"), new byte[1], getPublicKeyAsBytes(browserKey),
                 getPublicKeyAsBytes(ephemeralPublicKey));
 
-        byte[] keyInfo = buildInfo("aesgcm", context);
-        byte[] nonceInfo = buildInfo("nonce", context);
+        var keyInfo = buildInfo("aesgcm", context);
+        var nonceInfo = buildInfo("nonce", context);
 
-        byte[] key = HMacKeyDerivation.derive(secret, salt, keyInfo, 16);
-        byte[] nonce = HMacKeyDerivation.derive(secret, salt, nonceInfo, 12);
+        var key = HMacKeyDerivation.derive(secret, salt, keyInfo, 16);
+        var nonce = HMacKeyDerivation.derive(secret, salt, nonceInfo, 12);
 
         var content = notification.getMessageAsBytes();
         return encryptWithAES(key, content, nonce);
@@ -85,7 +85,7 @@ public class JCEEncryptor {
     }
 
     static byte[] buildInfo(String type, byte[] context) {
-        ByteBuffer buffer = ByteBuffer.allocate(19 + type.length() + context.length);
+        var buffer = ByteBuffer.allocate(19 + type.length() + context.length);
         buffer.put(Bytes.getBytes("Content-Encoding: "), 0, 18);
         buffer.put(Bytes.getBytes(type), 0, type.length());
         buffer.put(new byte[1], 0, 1);
@@ -109,7 +109,7 @@ public class JCEEncryptor {
 
     // todo javadoc
     static byte[] getPublicKeyAsBytes(ECPublicKey publicKey) {
-        byte[] bytes = ECKeys.decompressedRepresentation(publicKey);
+        var bytes = ECKeys.decompressedRepresentation(publicKey);
         var length = Bytes.unsignedIntToBytes(bytes.length);
         return Bytes.concat(length, bytes);
     }
