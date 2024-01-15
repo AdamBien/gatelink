@@ -15,7 +15,7 @@ import javax.crypto.NoSuchPaddingException;
 
 import org.eclipse.microprofile.metrics.annotation.Metered;
 
-import com.airhacks.gatelink.encryption.control.JCEEncryptor;
+import com.airhacks.gatelink.encryption.control.EncryptionFlow;
 import com.airhacks.gatelink.encryption.entity.EncryptedContent;
 import com.airhacks.gatelink.keymanagement.control.ECKeyGenerator;
 import com.airhacks.gatelink.keymanagement.entity.ECKeys;
@@ -32,7 +32,7 @@ import jakarta.inject.Inject;
 public class EncryptionService {
 
     @Inject
-    JCEEncryptor encryptor;
+    EncryptionFlow encryptor;
 
     SecureRandom random;
 

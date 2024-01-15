@@ -28,7 +28,7 @@ import com.airhacks.gatelink.notifications.boundary.NotificationsSenderIT;
  */
 public class EncryptorIT extends EncryptionTestEnvironment {
 
-    private JCEEncryptor cut;
+    private EncryptionFlow cut;
     private ECPublicKey ephemeralPublic;
     private ECPrivateKey ephemeralPrivate;
     private byte[] salt;
@@ -43,7 +43,7 @@ public class EncryptorIT extends EncryptionTestEnvironment {
         this.ephemeralPublic = (ECPublicKey) ephemeralKeys.getPublicKey();
         this.ephemeralPrivate = (ECPrivateKey) ephemeralKeys.getPrivateKey();
         this.salt = encryptionService.getNextSalt();
-        this.cut = new JCEEncryptor();
+        this.cut = new EncryptionFlow();
     }
 
 

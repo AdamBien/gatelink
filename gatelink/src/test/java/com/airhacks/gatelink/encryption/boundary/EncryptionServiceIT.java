@@ -4,7 +4,7 @@ package com.airhacks.gatelink.encryption.boundary;
 
 import org.junit.jupiter.api.BeforeEach;
 
-import com.airhacks.gatelink.encryption.control.JCEEncryptor;
+import com.airhacks.gatelink.encryption.control.EncryptionFlow;
 
 /**
  *
@@ -18,7 +18,7 @@ public class EncryptionServiceIT {
     public void init() {
         this.cut = new EncryptionService();
         this.cut.init();
-        this.cut.encryptor = new JCEEncryptor();
+        this.cut.encryptor = new EncryptionFlow();
     }
 
     public EncryptionService getCut() {

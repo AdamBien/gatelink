@@ -14,7 +14,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 
 import com.airhacks.gatelink.bytes.control.Bytes;
-import com.airhacks.gatelink.encryption.control.JCEEncryptor;
+import com.airhacks.gatelink.encryption.control.EncryptionFlow;
 
 
 /**
@@ -39,7 +39,7 @@ public interface JCEKeyLoader {
         if(indicator != 4){
             throw new IllegalArgumentException("Parameter does not represent a public key");
         }
-        var parameterSpec = JCEEncryptor.getParameterSpec();
+        var parameterSpec = EncryptionFlow.getParameterSpec();
         var kf = KeyFactory.getInstance("EC");
         var x = Bytes.fromUnsignedByteArray(keyContent, 1, expectedLength);
         var y = Bytes.fromUnsignedByteArray(keyContent, 1 + expectedLength, expectedLength);
@@ -50,7 +50,7 @@ public interface JCEKeyLoader {
     public static ECPrivateKey loadURLEncodedPrivateKey(String encodedPrivateKey) throws NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException {
         var decodedPrivateKey = Base64.getUrlDecoder().decode(encodedPrivateKey);
         var s = new BigInteger(1, decodedPrivateKey);
-        var parameterSpec = JCEEncryptor.getParameterSpec();
+        var parameterSpec = EncryptionFlow.getParameterSpec();
         var privateKeySpec = new ECPrivateKeySpec(s, parameterSpec);
         var keyFactory = getKeyFactory();
         return (ECPrivateKey) keyFactory.generatePrivate(privateKeySpec);

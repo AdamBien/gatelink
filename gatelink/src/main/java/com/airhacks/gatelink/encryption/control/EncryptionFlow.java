@@ -14,17 +14,15 @@ import java.security.spec.ECParameterSpec;
 import java.security.spec.InvalidParameterSpecException;
 
 import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.GCMParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 
 import org.eclipse.microprofile.metrics.annotation.Metered;
 
 import com.airhacks.gatelink.Control;
 import com.airhacks.gatelink.bytes.control.Bytes;
 import com.airhacks.gatelink.keymanagement.entity.ECKeys;
+import com.airhacks.gatelink.log.boundary.Tracer;
 import com.airhacks.gatelink.notifications.boundary.Notification;
 
 /**
@@ -32,12 +30,11 @@ import com.airhacks.gatelink.notifications.boundary.Notification;
  * @author airhacks.com
  */
 @Control
-public class JCEEncryptor {
+public class EncryptionFlow {
 
     public static final int SHA_256_LENGTH = 32;
 
-    private static final int TAG_SIZE = 16;
-
+  
     /**
      * 
      * ecdh_secret = ECDH(as_private, ua_public)
@@ -68,20 +65,11 @@ public class JCEEncryptor {
         var nonce = HMacKeyDerivation.derive(secret, salt, nonceInfo, 12);
 
         var content = notification.getMessageAsBytes();
-        return encryptWithAES(key, content, nonce);
+        Tracer.debug("AES parameters (key,content,nonce)", key,content,nonce);
+        var aesEncrypted = AESEncryptor.encryptWithAES(key, content, nonce);
+        Tracer.debug("AES encrypted content",aesEncrypted);
+        return aesEncrypted;
 
-    }
-
-    static byte[] encryptWithAES(byte[] key, byte[] content, byte[] nonce)
-            throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException,
-            InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
-        var cipher = Cipher.getInstance("AES/GCM/NoPadding", "BC");
-        var params = new GCMParameterSpec(TAG_SIZE * 8, nonce);
-        cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, "AES"), params);
-
-        var twoBytes = cipher.update(new byte[2]);
-        var encryptedMessage = cipher.doFinal(content);
-        return Bytes.concat(twoBytes, encryptedMessage);
     }
 
     static byte[] buildInfo(String type, byte[] context) {

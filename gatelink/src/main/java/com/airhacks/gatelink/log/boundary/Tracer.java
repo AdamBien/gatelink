@@ -3,6 +3,8 @@ package com.airhacks.gatelink.log.boundary;
 
 import com.airhacks.gatelink.Boundary;
 import java.util.Base64;
+import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -22,8 +24,17 @@ public class Tracer {
     }
 
     public void log(String label, byte[] message) {
-        String stringMessage = Base64.getUrlEncoder().encodeToString(message);
+        var stringMessage = Base64.getUrlEncoder().encodeToString(message);
         System.out.printf("[%s] %s %s\n", PREFIX, label, stringMessage);
+    }
+
+    public static void debug(String label, byte[]... messages) {
+        var encoder = Base64.getUrlEncoder();
+        var stringified = Stream
+                .of(messages)
+                .map(encoder::encodeToString)
+                .collect(Collectors.joining(","));
+        System.out.printf("[%s] %s %s\n", PREFIX, label, stringified);
     }
 
 }
