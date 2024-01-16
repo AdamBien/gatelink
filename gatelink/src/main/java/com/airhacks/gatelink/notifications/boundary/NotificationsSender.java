@@ -27,6 +27,7 @@ import com.airhacks.gatelink.keymanagement.boundary.KeyStore;
 import com.airhacks.gatelink.keymanagement.entity.ECKeys;
 import com.airhacks.gatelink.log.boundary.Tracer;
 import com.airhacks.gatelink.notifications.control.PushService;
+import com.airhacks.gatelink.signature.control.WebSignature;
 import com.airhacks.gatelink.subscriptions.control.SubscriptionsStore;
 
 import jakarta.inject.Inject;
@@ -95,24 +96,13 @@ public class NotificationsSender {
     public Response sendEncryptedMessage(ECKeys serverKeys, String endpoint, EncryptedContent encryptedContent)
             throws JoseException {
         tracer.log("Sending to endpoint " + endpoint);
-        String audience = extractAud(endpoint);
-        String salt = encryptedContent.getEncodedSalt();
-        String ephemeralPublicKey = encryptedContent.getEncodedEphemeralPublicKey();
-        String vapidPublicKey = serverKeys.getBase64URLEncodedPublicKeyWithoutPadding();
-
-        JwtClaims claims = new JwtClaims();
-        claims.setAudience(audience);
-        claims.setExpirationTimeMinutesInTheFuture(12 * 60);
-        claims.setSubject(this.subject);
-
-        JsonWebSignature jws = new JsonWebSignature();
-        jws.setHeader("typ", "JWT");
-        jws.setHeader("alg", "ES256");
-        jws.setPayload(claims.toJson());
-        jws.setKey(serverKeys.getPrivateKey());
-        jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.ECDSA_USING_P256_CURVE_AND_SHA256);
+        var audience = extractAud(endpoint);
+        var salt = encryptedContent.getEncodedSalt();
+        var ephemeralPublicKey = encryptedContent.getEncodedEphemeralPublicKey();
+        var vapidPublicKey = serverKeys.getBase64URLEncodedPublicKeyWithoutPadding();
+        var serializedMessage = WebSignature.create(serverKeys.getPrivateKey(), vapidPublicKey, audience);
         registry.counter(audience).inc();
-        return this.pushService.send(endpoint, salt, ephemeralPublicKey, vapidPublicKey, jws.getCompactSerialization(),
+        return this.pushService.send(endpoint, salt, ephemeralPublicKey, vapidPublicKey, serializedMessage,
                 encryptedContent.encryptedContent());
     }
 
