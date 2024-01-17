@@ -15,9 +15,6 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.metrics.MetricRegistry;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.RegistryType;
-import org.jose4j.jws.AlgorithmIdentifiers;
-import org.jose4j.jws.JsonWebSignature;
-import org.jose4j.jwt.JwtClaims;
 import org.jose4j.lang.JoseException;
 
 import com.airhacks.gatelink.Boundary;
@@ -27,8 +24,7 @@ import com.airhacks.gatelink.keymanagement.boundary.KeyStore;
 import com.airhacks.gatelink.keymanagement.entity.ECKeys;
 import com.airhacks.gatelink.log.boundary.Tracer;
 import com.airhacks.gatelink.notifications.control.PushService;
-import com.airhacks.gatelink.signature.control.SmallryeWebSignature;
-import com.airhacks.gatelink.signature.control.JoseWebSignature;
+import com.airhacks.gatelink.signature.control.JsonWebSignature;
 import com.airhacks.gatelink.subscriptions.control.SubscriptionsStore;
 
 import jakarta.inject.Inject;
@@ -102,7 +98,7 @@ public class NotificationsSender {
         var ephemeralPublicKey = encryptedContent.getEncodedEphemeralPublicKey();
         var vapidPublicKey = serverKeys.getBase64URLEncodedPublicKeyWithoutPadding();
         tracer.log("audience: " + audience);
-        var authorizationToken = SmallryeWebSignature.create(serverKeys.getPrivateKey(), subject, audience);
+        var authorizationToken = JsonWebSignature.create(serverKeys.getPrivateKey(), subject, audience);
         registry.counter(audience).inc();
         return this.pushService.send(endpoint, salt, ephemeralPublicKey, vapidPublicKey, authorizationToken,
                 encryptedContent.encryptedContent());
