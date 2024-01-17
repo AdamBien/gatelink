@@ -7,7 +7,7 @@ import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.lang.JoseException;
 
-public interface WebSignature {
+public interface JoseWebSignature {
     
     public static String create(ECPrivateKey privateKeys, String subject, String audience) {
         JwtClaims claims = new JwtClaims();
