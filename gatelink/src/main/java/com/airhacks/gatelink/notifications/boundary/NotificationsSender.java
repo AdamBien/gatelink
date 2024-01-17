@@ -102,7 +102,7 @@ public class NotificationsSender {
         var ephemeralPublicKey = encryptedContent.getEncodedEphemeralPublicKey();
         var vapidPublicKey = serverKeys.getBase64URLEncodedPublicKeyWithoutPadding();
         tracer.log("audience: " + audience);
-        var authorizationToken = JoseWebSignature.create(serverKeys.getPrivateKey(), subject, audience);
+        var authorizationToken = SmallryeWebSignature.create(serverKeys.getPrivateKey(), subject, audience);
         registry.counter(audience).inc();
         return this.pushService.send(endpoint, salt, ephemeralPublicKey, vapidPublicKey, authorizationToken,
                 encryptedContent.encryptedContent());
