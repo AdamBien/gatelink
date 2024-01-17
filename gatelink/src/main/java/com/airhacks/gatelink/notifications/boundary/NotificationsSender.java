@@ -101,9 +101,10 @@ public class NotificationsSender {
         var salt = encryptedContent.getEncodedSalt();
         var ephemeralPublicKey = encryptedContent.getEncodedEphemeralPublicKey();
         var vapidPublicKey = serverKeys.getBase64URLEncodedPublicKeyWithoutPadding();
-        var serializedMessage = JoseWebSignature.create(serverKeys.getPrivateKey(), vapidPublicKey, audience);
+        tracer.log("audience: " + audience);
+        var authorizationToken = JoseWebSignature.create(serverKeys.getPrivateKey(), subject, audience);
         registry.counter(audience).inc();
-        return this.pushService.send(endpoint, salt, ephemeralPublicKey, vapidPublicKey, serializedMessage,
+        return this.pushService.send(endpoint, salt, ephemeralPublicKey, vapidPublicKey, authorizationToken,
                 encryptedContent.encryptedContent());
     }
 
