@@ -3,6 +3,7 @@ package com.airhacks.gatelink.signature.control;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.io.StringReader;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.Base64;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import com.airhacks.gatelink.keymanagement.control.ECKeyGenerator;
 
+import jakarta.json.Json;
 import jakarta.json.JsonObject;
 
 public class JsonWebSignatureTest {
@@ -26,13 +28,29 @@ public class JsonWebSignatureTest {
         var sections = signedToken.split("\\.");
         var header = decode(sections[0]);
         var payload = decode(sections[1]);
-        System.out.println(header);
-        System.out.println(payload);
+
+        var headerObject = deserialize(header);
+        
+        assertThat(headerObject.getString("alg")).isEqualTo("ES256");
+        assertThat(headerObject.getString("typ")).isEqualTo("JWT");
+        
+        
+        var payloadObject = deserialize(payload);
+        assertThat(payloadObject.getString("aud")).isEqualTo(audience);
+        assertThat(payloadObject.getString("sub")).isEqualTo(subject);
+
     }
     
     static String decode(String encoded){
         var decoder = Base64.getDecoder();
         return new String(decoder.decode(encoded));
+    }
+
+    static JsonObject deserialize(String serialized){
+        try(var stringReader = new StringReader(serialized);
+        var jsonReader = Json.createReader(stringReader)){
+            return jsonReader.readObject();
+        }
     }
 
 
