@@ -5,10 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.util.Base64;
 
 import org.junit.jupiter.api.Test;
 
 import com.airhacks.gatelink.keymanagement.control.ECKeyGenerator;
+
+import jakarta.json.JsonObject;
 
 public class JsonWebSignatureTest {
 
@@ -18,9 +21,20 @@ public class JsonWebSignatureTest {
         var audience = "https://fcm.googleapis.com";
         var ecKeys = ECKeyGenerator.generate();
         var privateKey = ecKeys.getPrivateKey();
-        var smallryeResult = JsonWebSignature.create(privateKey, subject, audience);
-        assertNotNull(smallryeResult);
+        var signedToken = JsonWebSignature.create(privateKey, subject, audience);
+        assertNotNull(signedToken);
+        var sections = signedToken.split("\\.");
+        var header = decode(sections[0]);
+        var payload = decode(sections[1]);
+        System.out.println(header);
+        System.out.println(payload);
     }
+    
+    static String decode(String encoded){
+        var decoder = Base64.getDecoder();
+        return new String(decoder.decode(encoded));
+    }
+
 
     @Test
     void issuedAtIn12H() {
