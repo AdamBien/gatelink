@@ -9,7 +9,13 @@ import java.net.http.HttpResponse.BodyHandlers;
 
 public interface PushServiceClient {
 
-    public static HttpResponse<Void> sendNotification(String endpoint, String salt, String ephemeralPublicKey,
+    record NotificationResponse(int status){
+        public boolean isSuccessful(){
+            return status >= 200 && status <= 400;
+        }
+    }
+
+    public static NotificationResponse sendNotification(String endpoint, String salt, String ephemeralPublicKey,
             String vapidPublicKey, String authorizationToken, byte[] encryptedContent){
         var uri = URI.create(endpoint);
         try (var client = HttpClient.newHttpClient()) {
@@ -23,7 +29,8 @@ public interface PushServiceClient {
                     .header("Crypto-Key", "dh=" + ephemeralPublicKey + ";p256ecdsa=" + vapidPublicKey)
                     .header("Content-type", "application/octet-stream")
                     .build();
-            return client.send(request, BodyHandlers.discarding());
+            var response =  client.send(request, BodyHandlers.discarding());
+            return new NotificationResponse(response.statusCode());
         } catch (IOException | InterruptedException e) {
             throw new IllegalStateException("cannot send message: " + e);
         }

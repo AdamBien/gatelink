@@ -25,6 +25,7 @@ import com.airhacks.gatelink.keymanagement.entity.ECKeys;
 import com.airhacks.gatelink.log.boundary.Tracer;
 import com.airhacks.gatelink.notifications.control.PushService;
 import com.airhacks.gatelink.notifications.control.PushServiceClient;
+import com.airhacks.gatelink.notifications.control.PushServiceClient.NotificationResponse;
 import com.airhacks.gatelink.signature.control.JsonWebSignature;
 import com.airhacks.gatelink.subscriptions.control.SubscriptionsStore;
 
@@ -76,22 +77,21 @@ public class NotificationsSender {
                 .forEach(n -> this.send(n, serverKeys));
     }
 
-    public Response send(Notification notification, ECKeys serverKeys) {
-        Response response = null;
+    public boolean send(Notification notification, ECKeys serverKeys) {
         try {
             var encryptedContent = this.encryptionService.encrypt(notification, serverKeys);
             String endpoint = notification.getEndpoint();
             tracer.log("Sending to: " + endpoint);
-            response = this.sendEncryptedMessage(serverKeys, endpoint, encryptedContent);
-            registry.counter("responses_" + response.getStatus()).inc();
+            var notificationStatus = this.sendEncryptedMessage(serverKeys, endpoint, encryptedContent);
+            registry.counter("responses_" + notificationStatus.status()).inc();
+            return notificationStatus.isSuccessful();
         } catch (JoseException | NoSuchAlgorithmException | InvalidAlgorithmParameterException | NoSuchProviderException
                 | InvalidKeyException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException ex) {
             throw new IllegalStateException("Cannot encrypt", ex);
         }
-        return response;
     }
 
-    public Response sendEncryptedMessage(ECKeys serverKeys, String endpoint, EncryptedContent encryptedContent)
+    public NotificationResponse sendEncryptedMessage(ECKeys serverKeys, String endpoint, EncryptedContent encryptedContent)
             throws JoseException {
         tracer.log("Sending to endpoint " + endpoint);
         var audience = extractAud(endpoint);
@@ -101,9 +101,7 @@ public class NotificationsSender {
         tracer.log("audience: " + audience);
         var authorizationToken = JsonWebSignature.create(serverKeys.getPrivateKey(), subject, audience);
         registry.counter(audience).inc();
-        PushServiceClient.sendNotification(endpoint, salt, ephemeralPublicKey, vapidPublicKey, authorizationToken,encryptedContent.encryptedContent());
-        return null;
-        //return this.pushService.send(endpoint, salt, ephemeralPublicKey, vapidPublicKey, authorizationToken,encryptedContent.encryptedContent());
+        return PushServiceClient.sendNotification(endpoint, salt, ephemeralPublicKey, vapidPublicKey, authorizationToken,encryptedContent.encryptedContent());
     }
 
     static String extractAud(String endpoint) {

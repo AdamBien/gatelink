@@ -45,7 +45,6 @@ public class PushService {
                 header("Authorization", "WebPush " + authorizationToken).
                 header("Crypto-Key", "dh=" + ephemeralPublicKey + ";p256ecdsa=" + vapidPublicKey).
                 post(Entity.entity(new ByteArrayInputStream(encryptedContent), MediaType.APPLICATION_OCTET_STREAM));
-
         return response;
     }
 

@@ -57,7 +57,7 @@ public class EncryptorIT extends EncryptionTestEnvironment {
         var encryptedContent = new EncryptedContent(encrypted, salt, ephemeralPublic);
 
         var response = notificationsSender.sendEncryptedMessage(this.serverKeysWithSubscription.getServerKeys(), notification.getEndpoint(), encryptedContent);
-        System.out.println("response = " + response.getStatus());
+        System.out.println("response = " + response);
     }
 
 }
