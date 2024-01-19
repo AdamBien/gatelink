@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
 import java.net.http.HttpRequest.BodyPublishers;
-import java.net.http.HttpResponse.BodyHandlers;;
+import java.net.http.HttpResponse.BodyHandlers;
+
 
 public interface PushServiceClient {
 
     public static HttpResponse<Void> sendNotification(String endpoint, String salt, String ephemeralPublicKey,
-            String vapidPublicKey, String authorizationToken, byte[] encryptedContent)
-            throws IOException, InterruptedException {
+            String vapidPublicKey, String authorizationToken, byte[] encryptedContent){
         var uri = URI.create(endpoint);
         try (var client = HttpClient.newHttpClient()) {
             var request = HttpRequest
@@ -24,6 +24,8 @@ public interface PushServiceClient {
                     .header("Content-type", "application/octet-stream")
                     .build();
             return client.send(request, BodyHandlers.discarding());
+        } catch (IOException | InterruptedException e) {
+            throw new IllegalStateException("cannot send message: " + e);
         }
     }
 

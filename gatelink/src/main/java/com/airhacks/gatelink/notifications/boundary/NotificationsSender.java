@@ -24,6 +24,7 @@ import com.airhacks.gatelink.keymanagement.boundary.KeyStore;
 import com.airhacks.gatelink.keymanagement.entity.ECKeys;
 import com.airhacks.gatelink.log.boundary.Tracer;
 import com.airhacks.gatelink.notifications.control.PushService;
+import com.airhacks.gatelink.notifications.control.PushServiceClient;
 import com.airhacks.gatelink.signature.control.JsonWebSignature;
 import com.airhacks.gatelink.subscriptions.control.SubscriptionsStore;
 
@@ -100,8 +101,9 @@ public class NotificationsSender {
         tracer.log("audience: " + audience);
         var authorizationToken = JsonWebSignature.create(serverKeys.getPrivateKey(), subject, audience);
         registry.counter(audience).inc();
-        return this.pushService.send(endpoint, salt, ephemeralPublicKey, vapidPublicKey, authorizationToken,
-                encryptedContent.encryptedContent());
+        PushServiceClient.sendNotification(endpoint, salt, ephemeralPublicKey, vapidPublicKey, authorizationToken,encryptedContent.encryptedContent());
+        return null;
+        //return this.pushService.send(endpoint, salt, ephemeralPublicKey, vapidPublicKey, authorizationToken,encryptedContent.encryptedContent());
     }
 
     static String extractAud(String endpoint) {
