@@ -2,27 +2,27 @@
  */
 package com.airhacks.gatelink.notifications.boundary;
 
-import com.airhacks.gatelink.notifications.boundary.Notification;
-import com.airhacks.gatelink.notifications.boundary.NotificationsSender;
-import com.airhacks.gatelink.EncryptionTestEnvironment;
-import com.airhacks.gatelink.encryption.boundary.EncryptionServiceIT;
-import com.airhacks.gatelink.log.boundary.Tracer;
-import com.airhacks.gatelink.notifications.control.PushServiceIT;
-import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.metrics.Counter;
-import org.eclipse.microprofile.metrics.MetricRegistry;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import org.eclipse.microprofile.metrics.Counter;
+import org.eclipse.microprofile.metrics.MetricRegistry;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import com.airhacks.gatelink.EncryptionTestEnvironment;
+import com.airhacks.gatelink.encryption.boundary.EncryptionServiceIT;
+import com.airhacks.gatelink.log.boundary.Tracer;
 
 /**
  *
  * @author airhacks.com
  */
+//TODO: Conditionally enable on the availability of local key configuration json file
+@Disabled
 public class NotificationsSenderIT extends EncryptionTestEnvironment {
 
     private NotificationsSender cut;
@@ -39,7 +39,6 @@ public class NotificationsSenderIT extends EncryptionTestEnvironment {
         this.cut.tracer = new Tracer();
         this.cut.encryptionService = new EncryptionServiceIT().getCut();
 
-        this.cut.pushService = new PushServiceIT().getCut();
     }
 
     public NotificationsSender getCut() throws Exception {
@@ -48,17 +47,18 @@ public class NotificationsSenderIT extends EncryptionTestEnvironment {
     }
 
 
-    /**
     @Test
     public void sendNotification() {
-        Notification notification = this.serverKeysWithSubscription.getNotification("hey duke " + System.currentTimeMillis());
-        Response response = this.cut.send(notification, this.serverKeysWithSubscription.getServerKeys());
-        int status = response.getStatus();
-        assertThat(status).isEqualTo(201);
+        var notification = this.serverKeysWithSubscription.getNotification("hey duke " + System.currentTimeMillis());
+        var response = this.cut.send(notification, this.serverKeysWithSubscription.getServerKeys());
+        //int status = response.status()
+        assertThat(response).isTrue();
+        //assertThat(status).isEqualTo(201);
+        /*
         response.getHeaders().entrySet().forEach(e -> System.out.printf("%s -> %s \n", e.getKey(), e.getValue()));
         String responseMessage = response.readEntity(String.class);
         System.out.println("responseMessage = " + responseMessage);
+         */
     }
-     */
 
 }

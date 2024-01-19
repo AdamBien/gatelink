@@ -23,14 +23,12 @@ import com.airhacks.gatelink.encryption.entity.EncryptedContent;
 import com.airhacks.gatelink.keymanagement.boundary.KeyStore;
 import com.airhacks.gatelink.keymanagement.entity.ECKeys;
 import com.airhacks.gatelink.log.boundary.Tracer;
-import com.airhacks.gatelink.notifications.control.PushService;
 import com.airhacks.gatelink.notifications.control.PushServiceClient;
 import com.airhacks.gatelink.notifications.control.PushServiceClient.NotificationResponse;
 import com.airhacks.gatelink.signature.control.JsonWebSignature;
 import com.airhacks.gatelink.subscriptions.control.SubscriptionsStore;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.core.Response;
 
 /**
  *
@@ -55,8 +53,6 @@ public class NotificationsSender {
     @Inject
     Tracer tracer;
 
-    @Inject
-    PushService pushService;
 
     /**
      * server contact person, push service will use the contact, in the case of
