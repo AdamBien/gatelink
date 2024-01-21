@@ -7,7 +7,6 @@ import java.security.interfaces.ECPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 
-import com.airhacks.gatelink.bytes.control.Bytes;
 import com.airhacks.gatelink.subscriptions.entity.Subscription;
 
 /**
@@ -47,12 +46,12 @@ public class Notification {
     }
 
     static byte[] convertAuth(String auth) {
-        var content = Bytes.getBytes(auth);
+        var content = auth.getBytes();
         return Base64.getUrlDecoder().decode(content);
     }
 
     public byte[] getMessageAsBytes() {
-       return Bytes.getBytes(this.message);
+       return this.message.getBytes();
     }
 
     public String getEndpoint() {

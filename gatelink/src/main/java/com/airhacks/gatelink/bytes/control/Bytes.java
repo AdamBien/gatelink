@@ -23,13 +23,6 @@ public interface Bytes {
         }
     }
 
-    static byte[] getBytes(String content) {
-        try {
-            return content.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            throw new IllegalStateException("Unsupported encoding", ex);
-        }
-    }
 
     static byte[] parseHex(String input) {
         if (input.length() % 2 == 1) {

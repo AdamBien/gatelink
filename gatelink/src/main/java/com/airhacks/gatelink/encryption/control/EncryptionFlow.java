@@ -55,7 +55,7 @@ public class EncryptionFlow {
         secret = HMacKeyDerivation.derive(secret, notification.getAuthAsBytes(), buildInfo("auth", new byte[0]),
                 SHA_256_LENGTH);
 
-        var context = Bytes.concat(Bytes.getBytes("P-256"), new byte[1], getPublicKeyAsBytes(browserKey),
+        var context = Bytes.concat("P-256".getBytes(), new byte[1], getPublicKeyAsBytes(browserKey),
                 getPublicKeyAsBytes(ephemeralPublicKey));
 
         var keyInfo = buildInfo("aesgcm", context);
@@ -74,8 +74,8 @@ public class EncryptionFlow {
 
     static byte[] buildInfo(String type, byte[] context) {
         var buffer = ByteBuffer.allocate(19 + type.length() + context.length);
-        buffer.put(Bytes.getBytes("Content-Encoding: "), 0, 18);
-        buffer.put(Bytes.getBytes(type), 0, type.length());
+        buffer.put("Content-Encoding: ".getBytes(), 0, 18);
+        buffer.put(type.getBytes(), 0, type.length());
         buffer.put(new byte[1], 0, 1);
         buffer.put(context, 0, context.length);
         return buffer.array();
