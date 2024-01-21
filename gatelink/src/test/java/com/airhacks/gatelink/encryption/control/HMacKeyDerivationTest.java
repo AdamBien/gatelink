@@ -72,6 +72,26 @@ public class HMacKeyDerivationTest {
         assertThat(OKMString).isEqualTo(expectedOKM);
     }
 
+    @Test
+    @DisplayName("A.3.  Test Case 3 /  Test with SHA-256 and zero-length salt/info")
+    void deriveTestCase3() {
+
+        var IKM = Bytes.parseHex("0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b");
+        var salt = Bytes.parseHex(""); // (22 octets)
+        var info = Bytes.parseHex(""); // (0 octets)
+        var L = 42;
+
+        var expectedOKM = """
+                8da4e775a563c18f715f802a063c5a31
+                b8a11f5c5ee1879ec3454e5f3c738d2d
+                9d201395faa4b61a96c8
+                """.transform(HMacKeyDerivationTest::toSingleLine); //(42 octets)
+
+        var OKM = HMacKeyDerivation.derive(IKM, salt, info, L);
+        var OKMString = HexFormat.of().formatHex(OKM);
+        assertThat(OKMString).isEqualTo(expectedOKM);
+    }
+
     static String toSingleLine(String input) {
         return input
                 .strip()
