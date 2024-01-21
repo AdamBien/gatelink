@@ -51,17 +51,20 @@ public class EncryptionFlow {
         var browserKey = notification.getJCEPublicKey();
         // Use HKDF to combine the ECDH and authentication secrets
         // HKDF-Extract(salt=auth_secret, IKM=ecdh_secret)
-        byte[] secret = KeyExchange.getKeyAgreement(browserKey, ephemeralPrivateKey);
-        secret = HMacKeyDerivation.derive(secret, notification.getAuthAsBytes(), buildInfo("auth", new byte[0]),
+        var secret = KeyExchange.getKeyAgreement(browserKey, ephemeralPrivateKey);
+        var authInfo = info("auth", new byte[0]);
+        secret = HMacKeyDerivation.derive(secret, notification.getAuthAsBytes(), authInfo,
                 SHA_256_LENGTH);
 
         var context = Bytes.concat("P-256".getBytes(), new byte[1], getPublicKeyAsBytes(browserKey),
                 getPublicKeyAsBytes(ephemeralPublicKey));
 
-        var keyInfo = buildInfo("aesgcm", context);
-        var nonceInfo = buildInfo("nonce", context);
+        // cek_info = "Content-Encoding: aes128gcm" || 0x00
+        var contentEncryptionKeyInfo = info("aesgcm", context);
+        //nonce_info = "Content-Encoding: nonce" || 0x00
+        var nonceInfo = info("nonce", context);
 
-        var key = HMacKeyDerivation.derive(secret, salt, keyInfo, 16);
+        var key = HMacKeyDerivation.derive(secret, salt, contentEncryptionKeyInfo, 16);
         var nonce = HMacKeyDerivation.derive(secret, salt, nonceInfo, 12);
 
         var content = notification.getMessageAsBytes();
@@ -72,7 +75,7 @@ public class EncryptionFlow {
 
     }
 
-    static byte[] buildInfo(String type, byte[] context) {
+    static byte[] info(String type, byte[] context) {
         var buffer = ByteBuffer.allocate(19 + type.length() + context.length);
         buffer.put("Content-Encoding: ".getBytes(), 0, 18);
         buffer.put(type.getBytes(), 0, type.length());
