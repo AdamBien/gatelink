@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-
+import java.util.HexFormat;
 
 public interface Bytes {
 
@@ -29,6 +29,15 @@ public interface Bytes {
         } catch (UnsupportedEncodingException ex) {
             throw new IllegalStateException("Unsupported encoding", ex);
         }
+    }
+
+    static byte[] parseHex(String input) {
+        if (input.length() % 2 == 1) {
+            input = "0" + input;
+        }
+        return HexFormat
+                .of()
+                .parseHex(input);
     }
 
     static byte[] unsignedIntToBytes(int number) {

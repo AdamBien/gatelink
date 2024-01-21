@@ -1,9 +1,5 @@
 package com.airhacks.gatelink;
 
-import java.security.Security;
-
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
 import com.airhacks.gatelink.log.boundary.Tracer;
 
 import io.quarkus.runtime.Startup;
@@ -21,6 +17,5 @@ public class BCInitializer {
     @PostConstruct
     void registerBouncyCastle(){
         tracer.log("registering BouncyCastle");
-        Security.addProvider(new BouncyCastleProvider());
     }
 }
