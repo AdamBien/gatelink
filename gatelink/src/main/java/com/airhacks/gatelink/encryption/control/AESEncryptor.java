@@ -12,7 +12,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import com.airhacks.gatelink.bytes.control.Bytes;
+import com.airhacks.gatelink.bytes.control.ByteOperations;
 
 public interface AESEncryptor {
 
@@ -27,7 +27,7 @@ public interface AESEncryptor {
         cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, "AES"), params);
         var twoBytes = cipher.update(new byte[2]);
         var encryptedMessage = cipher.doFinal(content);
-        return Bytes.concat(twoBytes, encryptedMessage);
+        return ByteOperations.concat(twoBytes, encryptedMessage);
     }
 
 }

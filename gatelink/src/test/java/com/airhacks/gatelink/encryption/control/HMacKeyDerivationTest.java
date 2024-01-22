@@ -7,7 +7,7 @@ import java.util.HexFormat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.airhacks.gatelink.bytes.control.Bytes;
+import com.airhacks.gatelink.bytes.control.ByteOperations;
 
 /**
  * Testcases adopted from:
@@ -18,9 +18,9 @@ public class HMacKeyDerivationTest {
     @DisplayName("A.1.  Test Case 1 / Basic test case with SHA-256")
     void deriveTestCase1() {
 
-        var IKM = Bytes.parseHex("0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b"); // (22 octets)
-        var salt = Bytes.parseHex("000102030405060708090a0b0c"); // (13 octets)
-        var info = Bytes.parseHex("f0f1f2f3f4f5f6f7f8f9"); // (10 octets)
+        var IKM = ByteOperations.parseHex("0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b"); // (22 octets)
+        var salt = ByteOperations.parseHex("000102030405060708090a0b0c"); // (13 octets)
+        var info = ByteOperations.parseHex("f0f1f2f3f4f5f6f7f8f9"); // (10 octets)
         var L = 42;
 
         var expectedOKM = "3cb25f25faacd57a90434f64d0362f2a2d2d0a90cf1a5a4c5db02d56ecc4c5bf34007208d5b887185865";
@@ -34,21 +34,21 @@ public class HMacKeyDerivationTest {
     @DisplayName("A.2.  Test Case 2 /  Test with SHA-256 and longer inputs/outputs")
     void deriveTestCase2() {
 
-        var IKM = Bytes.parseHex("""
+        var IKM = ByteOperations.parseHex("""
                 000102030405060708090a0b0c0d0e0f\
                 101112131415161718191a1b1c1d1e1f\
                 202122232425262728292a2b2c2d2e2f\
                 303132333435363738393a3b3c3d3e3f\
                 404142434445464748494a4b4c4d4e4f\
                 """); // (80 octets)
-        var salt = Bytes.parseHex("""
+        var salt = ByteOperations.parseHex("""
                 606162636465666768696a6b6c6d6e6f\
                 707172737475767778797a7b7c7d7e7f\
                 808182838485868788898a8b8c8d8e8f\
                 909192939495969798999a9b9c9d9e9f\
                 a0a1a2a3a4a5a6a7a8a9aaabacadaeaf\
                 """); // (80 octets)
-        var info = Bytes.parseHex("""
+        var info = ByteOperations.parseHex("""
                 b0b1b2b3b4b5b6b7b8b9babbbcbdbebf\
                 c0c1c2c3c4c5c6c7c8c9cacbcccdcecf\
                 d0d1d2d3d4d5d6d7d8d9dadbdcdddedf\
@@ -75,9 +75,9 @@ public class HMacKeyDerivationTest {
     @DisplayName("A.3.  Test Case 3 /  Test with SHA-256 and zero-length salt/info")
     void deriveTestCase3() {
 
-        var IKM = Bytes.parseHex("0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b");
-        var salt = Bytes.parseHex(""); // (22 octets)
-        var info = Bytes.parseHex(""); // (0 octets)
+        var IKM = ByteOperations.parseHex("0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b");
+        var salt = ByteOperations.parseHex(""); // (22 octets)
+        var info = ByteOperations.parseHex(""); // (0 octets)
         var L = 42;
 
         var expectedOKM = """

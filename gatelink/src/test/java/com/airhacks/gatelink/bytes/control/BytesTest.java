@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 public class BytesTest {
     @Test
     void unsignedIntToBytes() {
-        byte result[] = Bytes.unsignedIntToBytes(42);
+        byte result[] = ByteOperations.unsignedIntToBytes(42);
         assertThat(result).isNotNull();
         assertThat((int) result[0]).isEqualTo((int) 0);
         assertThat((int) result[1]).isEqualTo((int) 42);
@@ -20,14 +20,14 @@ public class BytesTest {
 
     @Test
     void parseHex(){
-        var parsed = Bytes.parseHex("1");
+        var parsed = ByteOperations.parseHex("1");
         assertThat(parsed).hasSize(1);
         var input = "CAFEBABE";
-        var result = Bytes.parseHex(input);
+        var result = ByteOperations.parseHex(input);
         assertNotNull(result);
         assertThat(result).hasSize(input.length()/2);
 
-        var oneF = Bytes.parseHex("F");
+        var oneF = ByteOperations.parseHex("F");
         var decimalRepresentation = Byte.valueOf(oneF[0]).intValue();
         assertThat(decimalRepresentation).isEqualTo(15);
     }

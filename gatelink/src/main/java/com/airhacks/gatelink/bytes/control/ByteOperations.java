@@ -2,11 +2,10 @@ package com.airhacks.gatelink.bytes.control;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.HexFormat;
 
-public interface Bytes {
+public interface ByteOperations {
 
     static byte[] concat(byte[]... arrays) {
         try (var stream = new ByteArrayOutputStream()) {

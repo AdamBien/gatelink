@@ -20,7 +20,7 @@ import javax.crypto.NoSuchPaddingException;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 
 import com.airhacks.gatelink.Control;
-import com.airhacks.gatelink.bytes.control.Bytes;
+import com.airhacks.gatelink.bytes.control.ByteOperations;
 import com.airhacks.gatelink.keymanagement.entity.ECKeys;
 import com.airhacks.gatelink.log.boundary.Tracer;
 import com.airhacks.gatelink.notifications.boundary.Notification;
@@ -56,7 +56,7 @@ public class EncryptionFlow {
         secret = HMacKeyDerivation.derive(secret, notification.getAuthAsBytes(), authInfo,
                 SHA_256_LENGTH);
 
-        var context = Bytes.concat("P-256".getBytes(), new byte[1], getPublicKeyAsBytes(browserKey),
+        var context = ByteOperations.concat("P-256".getBytes(), new byte[1], getPublicKeyAsBytes(browserKey),
                 getPublicKeyAsBytes(ephemeralPublicKey));
 
         // cek_info = "Content-Encoding: aes128gcm" || 0x00
@@ -101,8 +101,8 @@ public class EncryptionFlow {
     // todo javadoc
     static byte[] getPublicKeyAsBytes(ECPublicKey publicKey) {
         var bytes = ECKeys.decompressedRepresentation(publicKey);
-        var length = Bytes.unsignedIntToBytes(bytes.length);
-        return Bytes.concat(length, bytes);
+        var length = ByteOperations.unsignedIntToBytes(bytes.length);
+        return ByteOperations.concat(length, bytes);
     }
 
 }

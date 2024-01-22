@@ -8,7 +8,7 @@ import java.util.Arrays;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import com.airhacks.gatelink.bytes.control.Bytes;
+import com.airhacks.gatelink.bytes.control.ByteOperations;
 
 /**
  * Implementation is based on: RFC 5869
@@ -90,10 +90,10 @@ public interface HMacKeyDerivation {
         int N = (int) Math.ceil(((double) len) / ((double) BLOCKSIZE));
         for (int i = 0; i < N; i++) {
             //T(1) = HMAC-Hash(PRK, T(0) | info | 0x01)
-            var iteration = Bytes.parseHex(Integer.toHexString(i + 1));
-            var bytes = Bytes.concat(Tn, info, iteration);
+            var iteration = ByteOperations.parseHex(Integer.toHexString(i + 1));
+            var bytes = ByteOperations.concat(Tn, info, iteration);
             Tn = process(mac, bytes);
-            T = Bytes.concat(T, Tn);
+            T = ByteOperations.concat(T, Tn);
         }
 
         return Arrays.copyOfRange(T, 0, len);

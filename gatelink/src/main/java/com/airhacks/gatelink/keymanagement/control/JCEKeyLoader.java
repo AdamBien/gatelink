@@ -13,7 +13,7 @@ import java.security.spec.ECPublicKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 
-import com.airhacks.gatelink.bytes.control.Bytes;
+import com.airhacks.gatelink.bytes.control.ByteOperations;
 import com.airhacks.gatelink.encryption.control.EncryptionFlow;
 
 
@@ -41,8 +41,8 @@ public interface JCEKeyLoader {
         }
         var parameterSpec = EncryptionFlow.getParameterSpec();
         var kf = KeyFactory.getInstance("EC");
-        var x = Bytes.fromUnsignedByteArray(keyContent, 1, expectedLength);
-        var y = Bytes.fromUnsignedByteArray(keyContent, 1 + expectedLength, expectedLength);
+        var x = ByteOperations.fromUnsignedByteArray(keyContent, 1, expectedLength);
+        var y = ByteOperations.fromUnsignedByteArray(keyContent, 1 + expectedLength, expectedLength);
         var w = new ECPoint(x, y);
         return (ECPublicKey) kf.generatePublic(new ECPublicKeySpec(w, parameterSpec));
     }
