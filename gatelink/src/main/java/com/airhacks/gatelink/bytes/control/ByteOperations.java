@@ -4,24 +4,29 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.HexFormat;
+import java.util.stream.Stream;
+
+import java.nio.ByteBuffer;
 
 public interface ByteOperations {
 
     static byte[] concat(byte[]... arrays) {
-        try (var stream = new ByteArrayOutputStream()) {
-            for (var array : arrays) {
-                if (array == null) {
-                    continue;
-                }
-                stream.write(array);
-            }
-            return stream.toByteArray();
-        } catch (IOException ex) {
-            throw new IllegalStateException("Array addition failed", ex);
-
+        var capacity = 0;
+        for (var array : arrays) {
+            if (array != null)
+                capacity += array.length;
         }
+        var buffer = ByteBuffer.allocate(capacity);
+        for (var array : arrays) {
+            if (array != null)
+                buffer.put(array);
+        }
+        return buffer.array();
     }
 
+    static ByteBuffer convert(byte[] buffer) {
+        return ByteBuffer.wrap(buffer);
+    }
 
     static byte[] parseHex(String input) {
         if (input.length() % 2 == 1) {

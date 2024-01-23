@@ -41,4 +41,12 @@ public class ByteOperationsTest {
         assertThat(result[2]).isEqualTo((byte)2);
         assertThat(result[3]).isEqualTo((byte)3);
     }
+
+    @Test
+    void concatEmpty(){
+        byte first[] = new byte[0];
+        byte second[] = null;
+        var result = ByteOperations.concat(first,second);
+        assertThat(result).hasSize(0);
+    }
 }
