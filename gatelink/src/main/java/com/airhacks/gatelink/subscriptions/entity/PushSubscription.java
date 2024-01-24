@@ -20,7 +20,7 @@ import jakarta.json.bind.annotation.JsonbTransient;
  * This class represents a PushSubscription as described in: https://developer.mozilla.org/en-US/docs/Web/API/PushSubscription
  * @author airhacks.com
  */
-public class Subscription {
+public class PushSubscription {
 
     public String endpoint;
 

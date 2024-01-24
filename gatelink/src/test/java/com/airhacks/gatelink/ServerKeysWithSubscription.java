@@ -8,10 +8,10 @@ import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.spec.InvalidKeySpecException;
 
-import com.airhacks.gatelink.keymanagement.control.JCEKeyLoader;
+import com.airhacks.gatelink.keymanagement.control.KeyLoader;
 import com.airhacks.gatelink.keymanagement.entity.ECKeys;
 import com.airhacks.gatelink.notifications.boundary.Notification;
-import com.airhacks.gatelink.subscriptions.entity.Subscription;
+import com.airhacks.gatelink.subscriptions.entity.PushSubscription;
 
 /**
  *
@@ -23,7 +23,7 @@ public class ServerKeysWithSubscription {
     ECPrivateKey serverPrivateKey;
     String serverPublicKeyAsString;
     String serverPrivateKeyAsString;
-    Subscription subscription;
+    PushSubscription subscription;
 
     public ServerKeysWithSubscription(String browserData) throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException, IOException {
 
@@ -31,10 +31,10 @@ public class ServerKeysWithSubscription {
         this.serverPublicKeyAsString = serverKeys.publicKey;
         this.serverPrivateKeyAsString = serverKeys.privateKey;
 
-        this.serverPublicKey = JCEKeyLoader.loadUrlEncodedPublicKey(serverPublicKeyAsString);
-        this.serverPrivateKey = JCEKeyLoader.loadURLEncodedPrivateKey(serverPrivateKeyAsString);
+        this.serverPublicKey = KeyLoader.loadUrlEncodedPublicKey(serverPublicKeyAsString);
+        this.serverPrivateKey = KeyLoader.loadURLEncodedPrivateKey(serverPrivateKeyAsString);
 
-        this.subscription = DataLoader.fromJson(String.format("%s.json", browserData), Subscription.class);
+        this.subscription = DataLoader.fromJson(String.format("%s.json", browserData), PushSubscription.class);
 
     }
 

@@ -20,15 +20,15 @@ public class SubscriptionTest {
     @Test
     public void testGetP256dhAsPublicKey() throws Exception {
         String mozillaPublicKey = "BBI3DLpP6uoCr53TVm58ztnRDJ6Wszr0oPIemSzJYLsLMYRhCeFU1EBE5mrq_kWSiNfj2Indn4GvgEAIPEXVLlg";
-        Subscription subscription = new Subscription();
-        subscription.keys = Json.createObjectBuilder().add(Subscription.PUBLIC_KEY, mozillaPublicKey).build();
+        PushSubscription subscription = new PushSubscription();
+        subscription.keys = Json.createObjectBuilder().add(PushSubscription.PUBLIC_KEY, mozillaPublicKey).build();
         var p256dhAsPublicKey = subscription.getP256dhAsPublicKey();
         assertNotNull(p256dhAsPublicKey);
     }
 
     @Test
     public void jsonbDeserialize() {
-        Subscription subscription = new Subscription();
+        PushSubscription subscription = new PushSubscription();
         subscription.endpoint = "endpoint";
         subscription.keys = Json.createObjectBuilder().add("message", "hello").build();
         String json = JsonbBuilder.create().toJson(subscription);

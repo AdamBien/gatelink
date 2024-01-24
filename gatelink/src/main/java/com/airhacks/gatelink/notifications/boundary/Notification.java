@@ -7,7 +7,7 @@ import java.security.interfaces.ECPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 
-import com.airhacks.gatelink.subscriptions.entity.Subscription;
+import com.airhacks.gatelink.subscriptions.entity.PushSubscription;
 
 /**
  *
@@ -15,15 +15,15 @@ import com.airhacks.gatelink.subscriptions.entity.Subscription;
  */
 public class Notification {
 
-    private final Subscription subscription;
+    private final PushSubscription subscription;
     private final String message;
 
-    public Notification(Subscription subscription, String message) {
+    public Notification(PushSubscription subscription, String message) {
         this.subscription = subscription;
         this.message = message;
     }
 
-    public Subscription getSubscription() {
+    public PushSubscription getSubscription() {
         return subscription;
     }
 

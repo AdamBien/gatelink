@@ -2,7 +2,7 @@
 package com.airhacks.gatelink.subscriptions.boundary;
 
 import com.airhacks.gatelink.subscriptions.control.InMemorySubscriptionsStore;
-import com.airhacks.gatelink.subscriptions.entity.Subscription;
+import com.airhacks.gatelink.subscriptions.entity.PushSubscription;
 import java.util.Base64;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -34,7 +34,7 @@ public class SubscriptionsResource {
 
     @POST
     @Counted(name = "subscribeActions", absolute = true)
-    public void subscribe(Subscription subscription) {
+    public void subscribe(PushSubscription subscription) {
         System.out.println("Subscription " + subscription);
         this.store.addSubscription(subscription);
     }

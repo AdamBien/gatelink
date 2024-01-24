@@ -1,7 +1,7 @@
 
 package com.airhacks.gatelink.subscriptions.control;
 
-import com.airhacks.gatelink.subscriptions.entity.Subscription;
+import com.airhacks.gatelink.subscriptions.entity.PushSubscription;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,7 +17,7 @@ import org.eclipse.microprofile.metrics.annotation.Gauge;
 @ApplicationScoped
 public class InMemorySubscriptionsStore {
 
-    private ConcurrentMap<String, Subscription> store;
+    private ConcurrentMap<String, PushSubscription> store;
 
     @PostConstruct
     public void initialize() {
@@ -29,11 +29,11 @@ public class InMemorySubscriptionsStore {
         return this.store.size();
     }
 
-    public void addSubscription(Subscription subscription) {
+    public void addSubscription(PushSubscription subscription) {
         this.store.put(subscription.endpoint, subscription);
     }
 
-    public List<Subscription> all() {
+    public List<PushSubscription> all() {
         return new ArrayList<>(this.store.values());
     }
 
