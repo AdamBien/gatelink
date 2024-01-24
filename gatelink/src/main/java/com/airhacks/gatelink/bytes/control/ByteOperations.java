@@ -1,12 +1,8 @@
 package com.airhacks.gatelink.bytes.control;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.math.BigInteger;
-import java.util.HexFormat;
-import java.util.stream.Stream;
-
 import java.nio.ByteBuffer;
+import java.util.HexFormat;
 
 public interface ByteOperations {
 
