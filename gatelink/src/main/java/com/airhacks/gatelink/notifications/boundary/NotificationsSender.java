@@ -20,7 +20,7 @@ import org.jose4j.lang.JoseException;
 import com.airhacks.gatelink.Boundary;
 import com.airhacks.gatelink.encryption.boundary.EncryptionService;
 import com.airhacks.gatelink.encryption.entity.EncryptedContent;
-import com.airhacks.gatelink.keymanagement.boundary.KeyStore;
+import com.airhacks.gatelink.keymanagement.boundary.InMemoryKeyStore;
 import com.airhacks.gatelink.keymanagement.entity.ECKeys;
 import com.airhacks.gatelink.log.boundary.Tracer;
 import com.airhacks.gatelink.notifications.control.PushServiceClient;
@@ -45,7 +45,7 @@ public class NotificationsSender {
     MetricRegistry registry;
 
     @Inject
-    KeyStore keyStore;
+    InMemoryKeyStore keyStore;
 
     @Inject
     EncryptionService encryptionService;
