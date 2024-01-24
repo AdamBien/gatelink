@@ -22,7 +22,6 @@ import com.airhacks.gatelink.keymanagement.entity.ECKeys;
 import com.airhacks.gatelink.notifications.boundary.Notification;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.inject.Inject;
 
 /**
  * https://docs.oracle.com/en/java/javase/21/security/oracle-providers.html#GUID-091BF58C-82AB-4C9C-850F-1660824D5254
@@ -30,9 +29,6 @@ import jakarta.inject.Inject;
  * @author airhacks.com
  */
 public class EncryptionService {
-
-    @Inject
-    EncryptionFlow encryptor;
 
     SecureRandom random;
 
@@ -60,7 +56,7 @@ public class EncryptionService {
         var serverEphemeralPublic = (ECPublicKey) ephemeralLocalKeys.getPublicKey();
         var ephemeralPrivateKey = (ECPrivateKey) ephemeralLocalKeys.getPrivateKey();
         var salt = this.getNextSalt();
-        var encryptedContent = this.encryptor.encrypt(notification, keys, serverEphemeralPublic, ephemeralPrivateKey,
+        var encryptedContent = EncryptionFlow.encrypt(notification, keys, serverEphemeralPublic, ephemeralPrivateKey,
                 salt);
         return new EncryptedContent(encryptedContent, salt, serverEphemeralPublic);
     }

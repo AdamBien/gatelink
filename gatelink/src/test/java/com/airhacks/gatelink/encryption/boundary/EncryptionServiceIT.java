@@ -18,7 +18,6 @@ public class EncryptionServiceIT {
     public void init() {
         this.cut = new EncryptionService();
         this.cut.init();
-        this.cut.encryptor = new EncryptionFlow();
     }
 
     public EncryptionService getCut() {

@@ -26,7 +26,6 @@ import com.airhacks.gatelink.notifications.boundary.NotificationsSenderIT;
  */
 public class EncryptorIT extends EncryptionTestEnvironment {
 
-    private EncryptionFlow cut;
     private ECPublicKey ephemeralPublic;
     private ECPrivateKey ephemeralPrivate;
     private byte[] salt;
@@ -41,7 +40,6 @@ public class EncryptorIT extends EncryptionTestEnvironment {
         this.ephemeralPublic = (ECPublicKey) ephemeralKeys.getPublicKey();
         this.ephemeralPrivate = (ECPrivateKey) ephemeralKeys.getPrivateKey();
         this.salt = encryptionService.getNextSalt();
-        this.cut = new EncryptionFlow();
     }
 
 
@@ -49,7 +47,7 @@ public class EncryptorIT extends EncryptionTestEnvironment {
     @Test
     public void encryptAndSend() throws Exception {
         var notification = this.serverKeysWithSubscription.getNotification("hey duke");
-        byte encrypted[] = this.cut.encrypt(notification, this.serverKeysWithSubscription.getServerKeys(), ephemeralPublic, ephemeralPrivate, this.salt);
+        byte encrypted[] = EncryptionFlow.encrypt(notification, this.serverKeysWithSubscription.getServerKeys(), ephemeralPublic, ephemeralPrivate, this.salt);
 
         var notificationsSender = new NotificationsSenderIT().getCut();
         var encryptedContent = new EncryptedContent(encrypted, salt, ephemeralPublic);

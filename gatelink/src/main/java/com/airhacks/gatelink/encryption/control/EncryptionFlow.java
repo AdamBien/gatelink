@@ -17,9 +17,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import org.eclipse.microprofile.metrics.annotation.Metered;
 
-import com.airhacks.gatelink.Control;
 import com.airhacks.gatelink.bytes.control.ByteOperations;
 import com.airhacks.gatelink.keymanagement.entity.ECKeys;
 import com.airhacks.gatelink.log.boundary.Tracer;
@@ -29,11 +27,9 @@ import com.airhacks.gatelink.notifications.boundary.Notification;
  *
  * @author airhacks.com
  */
-@Control
-public class EncryptionFlow {
+public interface EncryptionFlow {
 
-    public static final int SHA_256_LENGTH = 32;
-
+    int SHA_256_LENGTH = 32;
   
     /**
      * 
@@ -42,8 +38,7 @@ public class EncryptionFlow {
      * salt = random(16)
      * Checkout: https://www.rfc-editor.org/rfc/rfc8291.html
      */
-    @Metered
-    public byte[] encrypt(Notification notification, ECKeys keys, ECPublicKey ephemeralPublicKey,
+    public static byte[] encrypt(Notification notification, ECKeys keys, ECPublicKey ephemeralPublicKey,
             ECPrivateKey ephemeralPrivateKey, byte[] salt)
             throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchProviderException,
             InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
