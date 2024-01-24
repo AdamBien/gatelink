@@ -21,7 +21,7 @@ import com.airhacks.gatelink.encryption.control.EncryptionFlow;
  *
  * @author airhacks.com
  */
-public interface JCEKeyLoader {
+public interface KeyLoader {
 
     public static ECPublicKey loadUrlEncodedPublicKey(String content) throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException {
         byte[] decodedPublicKey = Base64.getUrlDecoder().decode(content);
