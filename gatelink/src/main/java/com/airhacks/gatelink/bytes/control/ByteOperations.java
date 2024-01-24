@@ -2,6 +2,7 @@ package com.airhacks.gatelink.bytes.control;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.HexFormat;
 
 public interface ByteOperations {
@@ -47,6 +48,13 @@ public interface ByteOperations {
             System.arraycopy(buf, off, magnitude, 0, length);
         }
         return new BigInteger(1, magnitude);
+    }
+
+    static byte[] stripLeadingZeros(byte[] data) {
+        int nonZeroIndex = 0;
+        while (nonZeroIndex < data.length && data[nonZeroIndex] == 0)
+            nonZeroIndex++;
+        return Arrays.copyOfRange(data, nonZeroIndex, data.length);
     }
 
 }

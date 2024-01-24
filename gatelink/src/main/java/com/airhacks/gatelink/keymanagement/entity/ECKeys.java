@@ -4,14 +4,16 @@ package com.airhacks.gatelink.keymanagement.entity;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECPoint;
-import java.util.Arrays;
 import java.util.Base64;
+
+import com.airhacks.gatelink.bytes.control.ByteOperations;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 
 /**
- *
+ * Elliptic Curve key pair convenience methods
+ * to return compressed and decompressed represaentations of the public key
  * @author airhacks.com
  */
 public record ECKeys(ECPrivateKey privateKey,ECPublicKey publicKey) {
@@ -36,8 +38,8 @@ public record ECKeys(ECPrivateKey privateKey,ECPublicKey publicKey) {
      * @return
      */
     public static byte[] decompressedRepresentation(ECPoint ecPoint) {
-        var xArray = stripLeadingZeros(ecPoint.getAffineX().toByteArray());
-        var yArray = stripLeadingZeros(ecPoint.getAffineY().toByteArray());
+        var xArray = ByteOperations.stripLeadingZeros(ecPoint.getAffineX().toByteArray());
+        var yArray = ByteOperations.stripLeadingZeros(ecPoint.getAffineY().toByteArray());
         var result = new byte[65];
         result[0] = 4;
         System.arraycopy(xArray, 0, result, 1, xArray.length);
@@ -45,14 +47,6 @@ public record ECKeys(ECPrivateKey privateKey,ECPublicKey publicKey) {
         return result;
 
     } 
-
-    static byte[] stripLeadingZeros(byte[] data) {
-        int nonZeroIndex = 0;
-        while (nonZeroIndex < data.length && data[nonZeroIndex] == 0) 
-            nonZeroIndex++;
-        return Arrays.copyOfRange(data, nonZeroIndex, data.length);
-    }
-    
 
 
     public String getBase64URLEncodedPrivateKeyWithoutPadding() {
