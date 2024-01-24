@@ -12,7 +12,7 @@ import jakarta.enterprise.context.ApplicationScoped;
  * @author airhacks.com
  */
 @ApplicationScoped
-public class KeyStore {
+public class InMemoryKeyStore {
 
     private ECKeys keys;
 

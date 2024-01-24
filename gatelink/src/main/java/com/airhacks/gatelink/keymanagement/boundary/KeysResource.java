@@ -16,7 +16,7 @@ import jakarta.ws.rs.Path;
 public class KeysResource {
 
     @Inject
-    KeyStore store;
+    InMemoryKeyStore store;
 
     @GET
     public JsonObject getKey() {
