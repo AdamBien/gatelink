@@ -15,7 +15,7 @@ import org.eclipse.microprofile.metrics.annotation.Gauge;
  * @author airhacks.com
  */
 @ApplicationScoped
-public class SubscriptionsStore {
+public class InMemorySubscriptionsStore {
 
     private ConcurrentMap<String, Subscription> store;
 

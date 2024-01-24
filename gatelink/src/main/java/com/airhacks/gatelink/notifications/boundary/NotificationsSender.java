@@ -26,7 +26,7 @@ import com.airhacks.gatelink.log.boundary.Tracer;
 import com.airhacks.gatelink.notifications.control.PushServiceClient;
 import com.airhacks.gatelink.notifications.control.PushServiceClient.NotificationResponse;
 import com.airhacks.gatelink.signature.control.JsonWebSignature;
-import com.airhacks.gatelink.subscriptions.control.SubscriptionsStore;
+import com.airhacks.gatelink.subscriptions.control.InMemorySubscriptionsStore;
 
 import jakarta.inject.Inject;
 
@@ -38,7 +38,7 @@ import jakarta.inject.Inject;
 public class NotificationsSender {
 
     @Inject
-    SubscriptionsStore store;
+    InMemorySubscriptionsStore store;
 
     @Inject
     @RegistryType(type = MetricRegistry.Type.APPLICATION)

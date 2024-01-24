@@ -1,7 +1,7 @@
 
 package com.airhacks.gatelink.subscriptions.boundary;
 
-import com.airhacks.gatelink.subscriptions.control.SubscriptionsStore;
+import com.airhacks.gatelink.subscriptions.control.InMemorySubscriptionsStore;
 import com.airhacks.gatelink.subscriptions.entity.Subscription;
 import java.util.Base64;
 import jakarta.enterprise.context.RequestScoped;
@@ -30,7 +30,7 @@ import org.eclipse.microprofile.metrics.annotation.Counted;
 public class SubscriptionsResource {
 
     @Inject
-    SubscriptionsStore store;
+    InMemorySubscriptionsStore store;
 
     @POST
     @Counted(name = "subscribeActions", absolute = true)

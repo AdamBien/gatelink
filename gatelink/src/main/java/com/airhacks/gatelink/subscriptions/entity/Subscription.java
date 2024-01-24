@@ -1,7 +1,7 @@
 
 package com.airhacks.gatelink.subscriptions.entity;
 
-import com.airhacks.gatelink.keymanagement.control.JCEKeyLoader;
+import com.airhacks.gatelink.keymanagement.control.KeyLoader;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -17,6 +17,7 @@ import jakarta.json.bind.annotation.JsonbTransient;
  *
  * {"endpoint":"https://fcm.googleapis.com/fcm/send/fgMwYcI1voE:APA91bG7e-lWxHqHrXQHl8q0DVZMKjWY32_ViKtHi0Go_uGr794V1aA1O5u4zSUlp52LyTzfllf4Ka9qsCB4z3q4ZlT4ZXUW8482VuHB1SOmUwks_sF9A5RjlG1ISA5galmk8u9qWNPv","expirationTime":null,"keys":{"p256dh":"BAbhIMLl60irVv_gxn3GEm4mk0PQsZsD9q3gfQJJAahVcUCyCi_p67ZZK_5q9rGJtPyv1Cen4ZkVC0-QM2itl6Q","auth":"kcdumC6d1QboOBpY-H3oRg"}}
  *
+ * This class represents a PushSubscription as described in: https://developer.mozilla.org/en-US/docs/Web/API/PushSubscription
  * @author airhacks.com
  */
 public class Subscription {
@@ -41,7 +42,7 @@ public class Subscription {
 
     @JsonbTransient
     public ECPublicKey getP256dhAsPublicKey() throws NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException {
-        return JCEKeyLoader.loadUrlEncodedPublicKey(this.getP256dh());
+        return KeyLoader.loadUrlEncodedPublicKey(this.getP256dh());
     }
 
     @Override
