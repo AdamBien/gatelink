@@ -45,7 +45,6 @@ public record ECKeys(ECPrivateKey privateKey,ECPublicKey publicKey) {
         System.arraycopy(xArray, 0, result, 1, xArray.length);
         System.arraycopy(yArray, 0, result, 33, yArray.length);
         return result;
-
     } 
 
 

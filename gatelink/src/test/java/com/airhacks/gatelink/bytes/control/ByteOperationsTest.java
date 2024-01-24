@@ -49,4 +49,12 @@ public class ByteOperationsTest {
         var result = ByteOperations.concat(first,second);
         assertThat(result).hasSize(0);
     }
+
+    @Test
+    void stripLeadingZeros() {
+        var given = new byte[]{0,0,1,2,3};
+        var expected = new byte[]{1,2,3};
+        var actual = ByteOperations.stripLeadingZeros(given);
+        assertThat(actual).isEqualTo(expected);
+    }
 }
