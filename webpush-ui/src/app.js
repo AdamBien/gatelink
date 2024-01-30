@@ -4,7 +4,7 @@ import './notifications/boundary/NotificationOutput.js';
 import { registerMessageListener } from './app/control/GatelinkEvents.js';
 
 navigator.serviceWorker.
-    register('push-worker.js', {scope:'/push/'}).
+    register('push-worker.js').
     then(reg => {
         console.log("PushWorker registered: ", reg);
         registerMessageListener();
